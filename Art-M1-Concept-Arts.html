@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — Artist Guidelines</title>
+<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/800658962127126528/1481055240961917089/og-icon.png?ex=69b1ebae&is=69b09a2e&hm=253dfcb46010b3ade00ce29c4b593c2dc65a57cee041bea71b05d9e01ff3ce67&=&format=webp&quality=lossless">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e; --ink-light: #2e2e4a; --paper: #f5f0e8; --paper-dark: #ede7d9;
+    --accent: #c45c3a; --accent-light: #e8785a; --accent-muted: #f0cfc4;
+    --rule: #c8bfaf; --text: #2a2535; --text-muted: #7a7068;
+    --green: #3a6b4a; --green-light: #cfe8d8;
+    --blue: #2a4a7a; --blue-light: #d0dff0;
+    --amber: #b87a20; --amber-light: #f5e8cc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; }
+  .page { max-width: 900px; margin: 40px auto; background: var(--paper); box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1); padding: 64px 72px; position: relative; }
+  .page::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px); pointer-events: none; z-index: 0; }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* MILESTONE */
+  .milestone-box { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 2px; margin-bottom: 44px; }
+  .milestone-box .milestone-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; display: block; }
+  .milestone-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px; }
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .milestone-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; font-size: 0.88rem; color: #d8d0c0; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .milestone-item:hover { background: rgba(255,255,255,0.1); }
+  .milestone-item.checked { background: rgba(58,107,74,0.25) !important; border-color: rgba(58,180,100,0.4) !important; }
+  .milestone-item input[type="checkbox"] { display: none; }
+  .milestone-item .check { width: 18px; height: 18px; border: 1.5px solid rgba(196,92,58,0.6); border-radius: 2px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; position: relative; }
+  .milestone-item.checked .check { background: #3a9a5a; border-color: #3a9a5a; }
+  .milestone-item.checked .check::after { content: ''; display: block; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }
+  .milestone-item.special { grid-column: span 2; border-color: rgba(196,92,58,0.3); background: rgba(196,92,58,0.08); }
+  .milestone-item.special .check { border-color: var(--accent-light); }
+  .item-label { font-weight: 400; color: #f0ece4; transition: color 0.15s; }
+  .milestone-item.checked .item-label { color: #8ac8a0; text-decoration: line-through; text-decoration-color: rgba(138,200,160,0.5); }
+  .item-note { font-size: 0.78rem; color: #8a8070; margin-top: 2px; }
+  .milestone-progress { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #3a9a5a; border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+  .progress-label { font-size: 0.72rem; color: #8a8070; white-space: nowrap; min-width: 60px; text-align: right; }
+  .progress-label span { color: #3a9a5a; font-weight: 500; }
+
+  /* SPEC CARDS */
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+  .spec-card { border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 18px 16px; background: var(--paper-dark); border-radius: 0 0 2px 2px; }
+  .spec-card.blue { border-top-color: var(--blue); } .spec-card.green { border-top-color: var(--green); } .spec-card.amber { border-top-color: var(--amber); }
+  .spec-card-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .spec-card-value { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--ink); line-height: 1.2; margin-bottom: 6px; }
+  .spec-card-note { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* PARALLAX */
+  .parallax-diagram { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .parallax-layer { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--rule); gap: 16px; }
+  .parallax-layer:last-child { border-bottom: none; }
+  .parallax-layer-num { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); width: 24px; flex-shrink: 0; }
+  .parallax-bar-wrap { flex: 1; height: 28px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+  .parallax-bar { height: 100%; display: flex; align-items: center; padding-left: 10px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: white; }
+  .l0 .parallax-bar { background: #382a5a; width: 15%; }
+  .l1 .parallax-bar { background: #2a3d5a; width: 30%; } .l2 .parallax-bar { background: #3a5a4a; width: 55%; }
+  .l3 .parallax-bar { background: #5a4a2a; width: 80%; } .l4 .parallax-bar { background: #6a3a2a; width: 100%; }
+  .parallax-info { width: 220px; flex-shrink: 0; }
+  .parallax-info-title { font-size: 0.8rem; font-weight: 500; color: var(--ink); display: block; }
+  .parallax-info-sub { font-size: 0.72rem; color: var(--text-muted); }
+  .parallax-speed { width: 80px; flex-shrink: 0; text-align: right; font-size: 0.72rem; color: var(--text-muted); }
+
+  /* RULE LIST */
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .rule-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; padding: 10px 14px; background: var(--paper-dark); border-left: 3px solid var(--rule); }
+  .rule-list li.good { border-left-color: var(--green); background: var(--green-light); }
+  .rule-list li.info { border-left-color: var(--blue); background: var(--blue-light); }
+  .rule-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: var(--paper-dark); } tbody tr:nth-child(odd) { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: top; }
+  tbody td:first-child { font-weight: 500; color: var(--ink); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-green { background: var(--green-light); color: var(--green); }
+  .tag-amber { background: var(--amber-light); color: var(--amber); }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  
+  /* ── STYLE INSPIRATION ── */
+  .inspo-intro {
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;
+    margin-bottom: 20px; padding: 12px 16px;
+    border-left: 3px solid var(--green); background: var(--green-muted); font-style: italic;
+  }
+  .inspo-intro strong { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .inspo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+  .inspo-card { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; background: var(--paper-dark); transition: box-shadow 0.2s; }
+  .inspo-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.12); }
+  .inspo-card.wide { grid-column: span 3; display: grid; grid-template-columns: 300px 1fr; }
+
+  .inspo-visual { width: 100%; height: 130px; position: relative; overflow: hidden; }
+  .inspo-placeholder {
+    width: 100%; height: 130px;
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .inspo-placeholder span {
+    font-size: 0.75rem; color: var(--rule); letter-spacing: 0.15em;
+    font-family: monospace; user-select: none;
+  }
+  .inspo-card.wide .inspo-visual { height: 100%; min-height: 130px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .inspo-body { padding: 12px 14px 14px; }
+  .inspo-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); margin-bottom: 5px; display: flex; align-items: baseline; gap: 8px; }
+  .inspo-medium { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+  .med-comic { background: var(--accent-muted); color: var(--accent); }
+  .med-game  { background: var(--blue-light); color: var(--blue); }
+  .inspo-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 9px; }
+  .inspo-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .itag { font-size: 0.61rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; background: rgba(42,58,90,0.07); color: var(--blue); border: 1px solid rgba(42,58,90,0.13); }
+  .itag.w { background: rgba(196,92,58,0.07); color: var(--accent); border-color: rgba(196,92,58,0.17); }
+  .itag.d { background: rgba(26,26,46,0.07); color: var(--ink); border-color: rgba(26,26,46,0.17); }
+  .itag.a { background: var(--amber-light); color: var(--amber); border-color: rgba(184,122,32,0.2); }
+  .inspo-note-box { margin-top: 16px; padding: 12px 16px; background: var(--amber-light); border-left: 3px solid var(--amber); font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+  .inspo-note-box strong { color: var(--amber); font-weight: 500; }
+
+  @media print { body { background: white; } .page { box-shadow: none; margin: 0; } }
+
+  /* ── STYLE INSPIRATION ── */
+  .inspo-intro { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 20px; padding: 12px 16px; border-left: 3px solid var(--blue); background: var(--blue-muted); font-style: italic; }
+  .inspo-intro strong { color: var(--text); font-style: normal; font-weight: 500; }
+  .inspo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .inspo-card { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; background: var(--paper-dark); transition: box-shadow 0.2s; }
+  .inspo-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.12); }
+  .inspo-visual { width: 100%; height: 130px; position: relative; overflow: hidden; }
+  .inspo-placeholder {
+    width: 100%; height: 130px;
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .inspo-placeholder span {
+    font-size: 0.75rem; color: var(--rule); letter-spacing: 0.15em;
+    font-family: monospace; user-select: none;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .inspo-body { padding: 12px 14px 14px; }
+  .inspo-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); margin-bottom: 5px; display: flex; align-items: baseline; gap: 8px; }
+  .inspo-medium { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+  .med-comic { background: var(--accent-muted); color: var(--accent); }
+  .med-game { background: var(--blue-light); color: var(--blue); }
+  .inspo-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 9px; }
+  .inspo-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .itag { font-size: 0.61rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; background: rgba(42,58,90,0.07); color: var(--blue); border: 1px solid rgba(42,58,90,0.13); }
+  .itag.w { background: rgba(196,92,58,0.07); color: var(--accent); border-color: rgba(196,92,58,0.17); }
+  .itag.d { background: rgba(26,26,46,0.07); color: var(--ink); border-color: rgba(26,26,46,0.17); }
+  .itag.a { background: var(--amber-light); color: var(--amber); border-color: rgba(184,122,32,0.2); }
+  .inspo-note-box { margin-top: 16px; padding: 12px 16px; background: var(--amber-light); border-left: 3px solid var(--amber); font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+  .inspo-note-box strong { color: var(--amber); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-tag">Internal — Art Team</span>
+      <h1>Cryptid Hotel</h1>
+      <p class="doc-subtitle">Artist Guidelines & Technical Specifications</p>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Phase</strong> Art Milestone 1 — Concept Arts</div>
+      <div><strong>Engine</strong> Godot 4.6</div>
+    </div>
+  </div>
+
+  <!-- MILESTONE -->
+  <div class="milestone-box">
+    <span class="milestone-tag">Première Milestone Artistes — Concept Arts</span>
+    <h2>Concept Arts Objectives</h2>
+    <div class="milestone-grid" id="milestone-grid">
+      <div class="milestone-item" data-id="room"><div class="check"></div><div><div class="item-label">Croquis d'une Room</div><div class="item-note">Standard room, side view, rectangular</div></div></div>
+      <div class="milestone-item" data-id="client"><div class="check"></div><div><div class="item-label">Croquis d'un Client</div><div class="item-note">Standard cryptid client, full body</div></div></div>
+      <div class="milestone-item" data-id="client-elite"><div class="check"></div><div><div class="item-label">Croquis d'un Client Élite</div><div class="item-note">Same as client + crown above head</div></div></div>
+      <div class="milestone-item" data-id="item"><div class="check"></div><div><div class="item-label">Croquis d'un Item</div><div class="item-note">Un vase</div></div></div>
+      <div class="milestone-item" data-id="background"><div class="check"></div><div><div class="item-label">Croquis d'un Background</div><div class="item-note">4 backgrounds (Parallax background), tileable</div></div></div>
+      <div class="milestone-item" data-id="ground"><div class="check"></div><div><div class="item-label">Croquis d'un Sol</div><div class="item-note">Ground terrain beneath the hotel, tileable</div></div></div>
+      <div class="milestone-item" data-id="reception-room"><div class="check"></div><div><div class="item-label">Croquis d'une Reception Room</div><div class="item-note">Room size x3 en longueur</div></div></div>
+      <div class="milestone-item" data-id="base-hotel"><div class="check"></div><div><div class="item-label">Croquis de la base de l'Hotel</div><div class="item-note">Ce qui support les rooms, donc le sol sous l'hotel + des spider legs</div></div></div>
+      <div class="milestone-item special" data-id="style-exploration"><div class="check"></div><div><div class="item-label">Style Exploration — Wendigo</div><div class="item-note">2–3 interprétations du Wendigo dans des styles différents · s'inspirer des références fournies en section 04 · pas besoin de polish, focus sur le style uniquement</div></div></div>
+    </div>
+    <div class="milestone-progress">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-label"><span id="progress-count">0</span> / 9 completed</div>
+    </div>
+  </div>
+
+  <!-- SECTION 01 -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">01</span><h2>Asset Size Specifications</h2><div class="section-rule"></div></div>
+    <div class="spec-grid" style="margin-bottom:14px;">
+      <div class="spec-card"><span class="spec-card-label">Standard Room</span><div class="spec-card-value">1200 × 600 px</div><div class="spec-card-note">Flat PNG, pas transparent. Side view, rectangular. Tileable avec room bordures.</div></div>
+      <div class="spec-card"><span class="spec-card-label">Reception Room</span><div class="spec-card-value">3600 × 600 px</div><div class="spec-card-note">3× standard room width, les clients arrivent de la gauche.</div></div>
+      <div class="spec-card green"><span class="spec-card-label">Background Layer</span><div class="spec-card-value">2560 × 1080 px</div><div class="spec-card-note">Must be seamlessly tileable horizontally. 3 parallax layers.</div></div>
+      <div class="spec-card green"><span class="spec-card-label">Ground Layer</span><div class="spec-card-value">2560 × 1080 px</div><div class="spec-card-note">Must be seamlessly tileable horizontally.</div></div>
+      <div class="spec-card blue"><span class="spec-card-label">Client & Elite Sprite</span><div class="spec-card-value">600 × 400 px</div><div class="spec-card-note">Pas de skeletons pour le moment donc pas de sheet on en parleras à la prochaine milestone.</div></div>
+      <div class="spec-card blue"><span class="spec-card-label">Item Sprite</span><div class="spec-card-value">600 × 600 px</div><div class="spec-card-note">Garder une taille consistante avec le plus gros item possible est probablement utile.</div></div>
+    </div>
+    <div class="spec-card"><span class="spec-card-label">Base de L'Hotel</span><div class="spec-card-value">3600 × 1200 px minimum</div><div class="spec-card-note">Au moins plus gros que la reception room, puisque elle la supporte, libre à vous pour les pattes pour le moment de la taille que ça prends, etc (rappel que c'est un croquis et placeholder et probablement le plus gros asset du jeu).</div></div>
+  </div>
+
+  <!-- SECTION 02 -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">02</span><h2>Background & Parallax Layers</h2><div class="section-rule"></div></div>
+    <div class="parallax-diagram">
+      <div class="parallax-layer l0"><div class="parallax-layer-num">L0</div><div class="parallax-bar-wrap"><div class="parallax-bar">Sky</div></div><div class="parallax-info"><span class="parallax-info-title">Almost Static layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div><div class="parallax-speed">Slowest scroll</div></div>
+      <div class="parallax-layer l1"><div class="parallax-layer-num">L1</div><div class="parallax-bar-wrap"><div class="parallax-bar">Mountains</div></div><div class="parallax-info"><span class="parallax-info-title">Furthest layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div><div class="parallax-speed">Slow scroll</div></div>
+      <div class="parallax-layer l2"><div class="parallax-layer-num">L2</div><div class="parallax-bar-wrap"><div class="parallax-bar">Distant Treeline / Fog / Hills</div></div><div class="parallax-info"><span class="parallax-info-title">Mid-distance layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div><div class="parallax-speed">Medium scroll</div></div>
+      <div class="parallax-layer l3"><div class="parallax-layer-num">L3</div><div class="parallax-bar-wrap"><div class="parallax-bar">Near Trees / Terrain Details</div></div><div class="parallax-info"><span class="parallax-info-title">Foreground layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div><div class="parallax-speed">Fast scroll</div></div>
+      <div class="parallax-layer l4"><div class="parallax-layer-num">L4</div><div class="parallax-bar-wrap"><div class="parallax-bar">Ground / Floor Terrain</div></div><div class="parallax-info"><span class="parallax-info-title">Ground layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div><div class="parallax-speed">Fastest scroll</div></div>
+    </div>
+    <ul class="rule-list">
+      <li class="info"><span class="rule-icon">i</span><span>Target resolution is <strong>1080p (1920×1080)</strong>. Background layers are at 2560px wide to make the repeated background not noticeable.</span></li>
+      <li class="good"><span class="rule-icon">✓</span><span><strong>Seamless tiling is mandatory.</strong> Left and right edges of each layer must connect without a visible seam. The hotel walks continuously so the background loops infinitely.</span></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 03 -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">03</span><h2>General Export Rules</h2><div class="section-rule"></div></div>
+    <table>
+      <thead><tr><th>Asset Type</th><th>Format</th><th>Background</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Rooms</td><td><span class="tag tag-blue">PNG</span></td><td>Opaque</td><td>Flat, bordures des rooms incluses</td></tr>
+        <tr><td>Background Layers</td><td><span class="tag tag-blue">PNG</span></td><td>1 Opaque, 3 Transparent</td><td>Seamlessly tileable horizontally, Only farthest background is opaque</td></tr>
+        <tr><td>Ground Layer</td><td><span class="tag tag-blue">PNG</span></td><td>Transparent</td><td>Seamlessly tileable horizontally</td></tr>
+        <tr><td>Client Sprites</td><td><span class="tag tag-blue">PNG</span></td><td>Transparent</td><td>600 x 400 px</td></tr>
+        <tr><td>Items</td><td><span class="tag tag-blue">PNG</span></td><td>Transparent</td><td>600 x 600 px</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 04: STYLE INSPIRATION -->
+  <br class="section">
+    <div class="section-header"><span class="section-num">04</span><h2>Style Inspiration — Wendigo Exploration</h2><div class="section-rule"></div></div>
+
+    <ul class="rule-list">
+      <li class="info"><span class="rule-icon">i</span><span>   Pour la style exploration, chaque artiste est invité à dessiner <strong>quelques versions du Wendigo</strong> en s'inspirant librement de ces références (ou d'autres réferences). L'objectif n'est pas de copier un style mais de l'interpréter à travers le prisme du jeu. Pas besoin de polish — ce sont des explorations rapides pour trouver une direction artistique commune.
+   </span></li>
+   </ul>
+  </br>
+
+
+    <div class="inspo-grid">
+
+      <div class="inspo-card">
+        <img src="https://a.storyblok.com/f/259446/1280x720/e94678ede0/dont-starve-gameplay-2.jpg" style="height:160px;width:100%;object-fit:cover;display:block;">
+        <div class="inspo-body">
+          <div class="inspo-title">Don't Starve <span class="inspo-medium med-game">Game</span></div>
+          <p class="inspo-desc">Silhouettes très contrastées à l'encre noire sur des fonds désaturés. Personnages anguleux et expressifs, traits épais, ombres massives. L'étrangeté vient de la forme, pas de la couleur.</p>
+        </div>
+      </div>
+
+      <div class="inspo-card">
+        <img src="https://media.discordapp.net/attachments/1467670258851643466/1480198757063589989/image.png?ex=69b01f84&is=69aece04&hm=e916ec4c15e62d3714f3d3e77d9433f4e8e407e8dc29370c4e75f382e69db4a8&=&format=webp&quality=lossless" style="height:160px;width:100%;object-fit:cover;display:block;">
+        <div class="inspo-body">
+          <div class="inspo-title">Hellboy — Mignola <span class="inspo-medium med-comic">Comic</span></div>
+          <p class="inspo-desc">Masses d'ombre quasi-géométriques, très peu de détails dans le noir. Couleurs limitées et saturées sur fond sombre.</p>
+        </div>
+      </div>
+
+      <div class="inspo-card">
+        <img src="https://cdn.discordapp.com/attachments/1467670258851643466/1480686595249147935/fzafzafzafzafzafaz.png?ex=69b0945a&is=69af42da&hm=12a85237668944f2958fe4da686854969812a3c6ace28f423001ffde22082a00&" style="height:160px;width:100%;object-fit:cover;display:block;">
+        <div class="inspo-body">
+          <div class="inspo-title">Hollow Knight <span class="inspo-medium med-game">Game</span></div>
+          <p class="inspo-desc">Silhouettes nettes sur fonds atmosphériques profonds. Personnages simples mais très lisibles en jeu. Ambiances et couleurs mélancolique avec des touches de lumière froide. Formes organiques et fluides.</p>
+        </div>
+      </div>
+
+      <div class="inspo-card">
+        <img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/21946309/hades_09_dec_2019_01.jpg?quality=90&strip=all&crop=3.125,0,84.375,100" style="height:160px;width:100%;object-fit:cover;display:block;">
+          <div class="inspo-body" style="display:flex;flex-direction:column;justify-content:center;">
+            <div class="inspo-title">Hades<span class="inspo-medium med-game">Game</span></div>
+            <p class="inspo-desc">Style painterly riche avec des couleurs joyau profondes. Montre comment avoir un style illustré très qualitatif qui reste lisible en jeu et à petite taille.</p>
+         </div>
+      </div>
+
+      <div class="inspo-card">
+        <img src="https://media.discordapp.net/attachments/1467670258851643466/1480199268303376466/il_300x300.5184816363_3nqz.png?ex=69b1717e&is=69b01ffe&hm=0a0bfc8feb841fde6d136d712754a17008cae4518db5bd8adaf9f2a0106f2f91&=&format=webp&quality=lossless" style="height:160px;width:100%;object-fit:cover;display:block;">
+          <div class="inspo-body" style="display:flex;flex-direction:column;justify-content:center;">
+            <div class="inspo-title">Folklore<span class="inspo-medium med-game">Web</span></div>
+            <p class="inspo-desc">Style Folklore populaire</p>
+         </div>
+      </div>
+
+      <div class="inspo-card">
+        <img src="https://media.discordapp.net/attachments/1467670258851643466/1481034979495510097/image.png?ex=69b1d8cf&is=69b0874f&hm=6b864d09f1813f7b18335d35df91aac17e53add61b0fe16a86db58f95df1c448&=&format=webp&quality=lossless" style="height:160px;width:100%;object-fit:cover;display:block;">
+          <div class="inspo-body" style="display:flex;flex-direction:column;justify-content:center;">
+            <div class="inspo-title">Scribbled<span class="inspo-medium med-game">Web</span></div>
+            <p class="inspo-desc">Style plutot Scribbled</p>
+         </div>
+      </div>
+    </div>
+
+
+    <div style="margin-top:14px;">
+      <div style="font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Référence de Design — Wendigo</div>
+      <div style="display:grid;grid-template-columns:260px 1fr;border:1px solid var(--rule);border-radius:2px;overflow:hidden;background:var(--paper-dark);">
+        <img src="https://media.discordapp.net/attachments/1469682739975553139/1470876969737650277/ugc_2263688881783911825_DCA56C1AC7B7392D882AB6B4BF17BCD8A3614861_.png?ex=69b07ced&is=69af2b6d&hm=4a0819802e446ab9f5519de1189b01e2ff38bacfb739de1ae8ec6b5fe3bd07b1&=&format=webp&quality=lossless" style="height:160px;width:260px;object-fit:cover;display:block;">
+        <div style="padding:16px 18px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ink);margin-bottom:6px;">Référence Wendigo</div>
+          <p style="font-size:0.8rem;color:var(--text-muted);line-height:1.55;">Image de référence pour le design du Wendigo</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="inspo-note-box">
+      <strong>Note :</strong> Ces références couvrent un spectre large intentionnellement. L'objectif est de voir quelles directions résonnent le mieux avec l'univers du jeu. Il n'y a pas de mauvaise réponse — même une exploration qui ne sera pas retenue aide à définir ce qu'on ne veut <em>pas</em>.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — Art Milestone 1 — Concept Arts v1.0</div>
+    <div>Art Milestone 1 - Concept Arts</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div>
+<script>
+  const STORAGE_KEY = 'cryptid-hotel-milestone-1';
+  function getChecked() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
+  function saveChecked(ids) { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); }
+  function updateProgress() {
+    const total = document.querySelectorAll('.milestone-item').length;
+    const done  = document.querySelectorAll('.milestone-item.checked').length;
+    document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+    document.getElementById('progress-count').textContent = done;
+  }
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    const id = el.dataset.id;
+    let checked = getChecked();
+    if (el.classList.contains('checked')) { if (!checked.includes(id)) checked.push(id); }
+    else { checked = checked.filter(x => x !== id); }
+    saveChecked(checked);
+    updateProgress();
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    getChecked().forEach(id => { const el = document.querySelector(`.milestone-item[data-id="${id}"]`); if (el) el.classList.add('checked'); });
+    document.querySelectorAll('.milestone-item').forEach(el => el.addEventListener('click', () => toggleCheck(el)));
+    updateProgress();
+  });
+</script>
+</body>
+</html>
