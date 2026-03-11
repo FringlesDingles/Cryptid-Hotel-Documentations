@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — Documentation</title>
+<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/800658962127126528/1481055240961917089/og-icon.png?ex=69b1ebae&is=69b09a2e&hm=253dfcb46010b3ade00ce29c4b593c2dc65a57cee041bea71b05d9e01ff3ce67&=&format=webp&quality=lossless">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e; --paper: #f5f0e8; --paper-dark: #ede7d9;
+    --accent: #c45c3a; --accent-light: #e8785a;
+    --rule: #c8bfaf; --text: #2a2535; --text-muted: #7a7068;
+    --green: #3a6b4a; --blue: #2a4a7a; --amber: #b87a20; --purple: #6a3a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; padding-bottom: 60px; }
+
+  .page {
+    max-width: 900px; margin: 40px auto; background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1);
+    padding: 64px 72px; position: relative;
+  }
+  .page::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px);
+    pointer-events: none; z-index: 0;
+  }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 48px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTION */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* DOC LIST */
+  .doc-list { display: flex; flex-direction: column; gap: 4px; }
+  .doc-entry {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 10px 14px;
+    background: var(--paper-dark);
+    border-left: 3px solid var(--rule);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .doc-entry:hover { background: var(--paper); }
+  .doc-entry:hover .doc-entry-arrow { transform: translateX(3px); color: var(--accent); }
+
+  .doc-entry.blue:hover   { border-left-color: var(--blue); }
+  .doc-entry.green:hover  { border-left-color: var(--green); }
+  .doc-entry.amber:hover  { border-left-color: var(--amber); }
+  .doc-entry.accent:hover { border-left-color: var(--accent); }
+  .doc-entry.purple:hover { border-left-color: var(--purple); }
+
+  .doc-entry-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); min-width: 110px; flex-shrink: 0; }
+  .doc-entry-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); flex: 1; }
+  .doc-entry-desc { font-size: 0.78rem; color: var(--text-muted); }
+  .doc-entry-arrow { font-size: 0.75rem; color: var(--rule); transition: transform 0.15s, color 0.15s; flex-shrink: 0; }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="doc-tag">Internal — Vue d'ensemble</span>
+      <h1>Cryptid Hotel</h1>
+      <p class="doc-subtitle">Documentation Hub</p>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Engine</strong> Godot 4.6</div>
+      <div><strong>Status</strong> En développement</div>
+    </div>
+  </div>
+
+  <!-- ART TEAM -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Art Team Milestones</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="doc-list">
+      <a href="Art-M1-Concept-Arts.html" class="doc-entry purple">
+        <span class="doc-entry-label">Milestone 1</span>
+        <span class="doc-entry-title">Concept Arts</span>
+        <span class="doc-entry-desc">Style direction, Placeholders, References</span>
+        <span class="doc-entry-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- DEV TEAM -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Dev Team Milestones</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="doc-list">
+      <a href="Dev-M1.html" class="doc-entry blue">
+        <span class="doc-entry-label">Milestone 1</span>
+        <span class="doc-entry-title">Base Game</span>
+        <span class="doc-entry-desc">Core Loop Playable, Main Architecture, Base Components</span>
+        <span class="doc-entry-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- GUIDELINES & NORMES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Guidelines & Normes</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="doc-list">
+      <a href="file-naming-conventions.html" class="doc-entry accent">
+        <span class="doc-entry-label">Normes</span>
+        <span class="doc-entry-title">File Naming Conventions</span>
+        <span class="doc-entry-desc">Nommage des fichiers et organisations des dossiers</span>
+        <span class="doc-entry-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- GAME DESIGN -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Game Design Docs</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="doc-list">
+      <a href="GD-M1.html" class="doc-entry amber">
+        <span class="doc-entry-label">TBD</span>
+        <span class="doc-entry-title">TBD</span>
+        <span class="doc-entry-desc">TBD</span>
+        <span class="doc-entry-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — Documentation Hub</div>
+    <div>Index v1.0</div>
+    <div class="page-num">~</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — File Naming Conventions</title>
+<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/800658962127126528/1481055240961917089/og-icon.png?ex=69b1ebae&is=69b09a2e&hm=253dfcb46010b3ade00ce29c4b593c2dc65a57cee041bea71b05d9e01ff3ce67&=&format=webp&quality=lossless">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e; --ink-light: #2e2e4a; --paper: #f5f0e8; --paper-dark: #ede7d9;
+    --accent: #c45c3a; --accent-light: #e8785a; --accent-muted: #f0cfc4;
+    --rule: #c8bfaf; --text: #2a2535; --text-muted: #7a7068;
+    --green: #3a6b4a; --green-light: #cfe8d8;
+    --blue: #2a4a7a; --blue-light: #d0dff0;
+    --amber: #b87a20; --amber-light: #f5e8cc;
+    --purple: #5a3a7a; --purple-light: #e8d8f5;
+    --mono: 'DM Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; }
+  .page { max-width: 900px; margin: 40px auto; background: var(--paper); box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1); padding: 64px 72px; position: relative; }
+  .page::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px); pointer-events: none; z-index: 0; }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* CORE RULES BOX */
+  .rules-box { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 2px; margin-bottom: 44px; }
+  .rules-box .rules-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; display: block; }
+  .rules-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px; }
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rule-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; font-size: 0.88rem; }
+  .rule-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .rule-title { font-weight: 500; color: #f0ece4; display: block; margin-bottom: 2px; }
+  .rule-desc { font-size: 0.78rem; color: #8a8070; line-height: 1.5; }
+
+  /* PATTERN BOX */
+  .pattern-box { background: var(--paper-dark); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 2px; padding: 18px 20px; margin-bottom: 16px; }
+  .pattern-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: block; }
+  .pattern { font-family: var(--mono); font-size: 1rem; color: var(--ink); line-height: 1.8; }
+  .seg-type { color: var(--green); font-weight: 500; }
+  .seg-name { color: var(--amber); font-weight: 500; }
+  .seg-variant { color: var(--blue); font-weight: 500; }
+  .seg-state { color: var(--purple); font-weight: 500; }
+  .seg-ext { color: var(--text-muted); }
+
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* EXAMPLES TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: var(--paper-dark); }
+  tbody tr:nth-child(odd) { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: top; }
+  tbody td:first-child { font-family: var(--mono); font-size: 0.82rem; color: var(--ink); font-weight: 400; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tag-green { background: var(--green-light); color: var(--green); }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-amber { background: var(--amber-light); color: var(--amber); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-red { background: #f5d8d8; color: #7a2a2a; }
+
+  /* FOLDER TREE */
+  .tree { background: var(--ink); border-radius: 2px; padding: 24px 28px; font-family: var(--mono); font-size: 0.82rem; line-height: 2; }
+  .tree-folder { color: var(--amber-light); }
+  .tree-comment { color: #4a4560; font-style: italic; margin-left: 8px; }
+  .tree-indent { color: #3a3550; user-select: none; }
+
+  /* DONTS */
+  .dont-list { display: flex; flex-direction: column; gap: 8px; }
+  .dont-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 14px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; }
+  .dont-bad { font-family: var(--mono); font-size: 0.82rem; color: #7a2a2a; text-decoration: line-through; text-decoration-color: rgba(180,60,60,0.4); }
+  .dont-arrow { color: var(--text-muted); text-align: center; font-size: 1rem; }
+  .dont-good { font-family: var(--mono); font-size: 0.82rem; color: var(--green); }
+
+  /* RULE LIST */
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .rule-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; padding: 10px 14px; background: var(--paper-dark); border-left: 3px solid var(--rule); }
+  .rule-list li.good { border-left-color: var(--green); background: var(--green-light); }
+  .rule-list li.info { border-left-color: var(--blue); background: var(--blue-light); }
+  .rule-list li.warn { border-left-color: var(--accent); background: var(--accent-muted); }
+  .rule-icon-sm { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  code { font-family: var(--mono); font-size: 0.82rem; background: var(--paper-dark); padding: 1px 5px; border-radius: 2px; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="doc-tag">Cryptid Hotel — Internal Dev Doc</span>
+      <h1>File Naming<br>Conventions</h1>
+      <div class="doc-subtitle">All teams · Read before pushing anything to the repo</div>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Engine</strong> Godot 4.6</div>
+      <div><strong>Applies to</strong> Art & Dev teams</div>
+      <div><strong>Updated</strong> March 2026</div>
+    </div>
+  </div>
+
+  <!-- CORE RULES -->
+  <div class="rules-box">
+    <span class="rules-tag">Core Rules — No Exceptions</span>
+    <h2>Before naming anything</h2>
+    <div class="rules-grid">
+      <div class="rule-item">
+        <span class="rule-icon">🔡</span>
+        <div>
+          <span class="rule-title">Lowercase only</span>
+          <span class="rule-desc">Godot is case-sensitive on Linux. Always lowercase, no exceptions.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">🔗</span>
+        <div>
+          <span class="rule-title">Underscores only</span>
+          <span class="rule-desc">No '-', no spaces. Use '_' as the only separator everywhere.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">📁</span>
+        <div>
+          <span class="rule-title">Type prefix first</span>
+          <span class="rule-desc">Always start with the asset type so files group naturally in any folder.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">🚫</span>
+        <div>
+          <span class="rule-title">No vague names</span>
+          <span class="rule-desc">No "final", "new", "v2", "test", "copy". Name what it IS.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPRITES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Sprites & Images</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">.png · transparent background</span>
+    </div>
+
+    <div class="pattern-box">
+      <span class="pattern-label">Pattern — General</span>
+      <div class="pattern">
+        <span class="seg-type">type</span>_<span class="seg-name">name</span>_<span class="seg-variant">variant</span><span class="seg-ext">.png</span>
+        <span style="color:var(--text-muted);font-size:0.78rem;margin-left:12px;">— variant is optional</span>
+      </div>
+    </div>
+    <div class="pattern-box" style="border-left-color: var(--green); margin-top: -8px;">
+      <span class="pattern-label">Pattern — Client (one PNG per character, all parts + expressions inside)</span>
+      <div class="pattern">
+        <span class="seg-type">client</span>_<span class="seg-name">race_name</span><span class="seg-ext">.png</span>
+        <span style="color:var(--text-muted);font-size:0.78rem;margin-left:12px;">— body parts & expression frames all on one sheet, Godot cuts regions</span>
+      </div>
+    </div>
+    <div class="pattern-box" style="border-left-color: var(--purple); margin-top: -8px;">
+      <span class="pattern-label">Pattern — Placeholders (all types)</span>
+      <div class="pattern">
+        <span class="seg-type">type</span>_<span class="seg-name">name</span>_<span class="seg-state">placeholder</span><span class="seg-ext">.png</span>
+        <span style="color:var(--text-muted);font-size:0.78rem;margin-left:12px;">— temporary placeholder, will be replaced</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#3a6b4a"></div><span style="color:var(--green);font-weight:500;">type</span>&nbsp;— client, room, item, ui, bg</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b87a20"></div><span style="color:var(--amber);font-weight:500;">name</span>&nbsp;— asset name</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2a4a7a"></div><span style="color:var(--blue);font-weight:500;">variant</span>&nbsp;— optional sub-type (icon, layer1…)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#5a3a7a"></div><span style="color:var(--purple);font-weight:500;">placeholder</span>&nbsp;— suffix for all temporary placeholders</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+       <tr>
+          <td><span class="seg-type">client</span>_<span class="seg-name">fresno_nightcrawler</span>_<span class="seg-state">placeholder</span>.png</td>
+          <td><span class="tag tag-green">Client</span></td>
+          <td>Fresno Nightcrawler — placeholder</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">room</span>_<span class="seg-name">bedroom</span>_<span class="seg-state">placeholder</span>.png</td>
+          <td><span class="tag tag-blue">Room</span></td>
+          <td>Bedroom room — placeholder</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">item</span>_<span class="seg-name">candle</span>_<span class="seg-state">placeholder</span>.png</td>
+          <td><span class="tag tag-amber">Item</span></td>
+          <td>Candle item — placeholder</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">client</span>_<span class="seg-name">wendigo</span>.png</td>
+          <td><span class="tag tag-green">Client</span></td>
+          <td>Wendigo — all body parts + expression frames on one sheet</td>
+        </tr>
+        <tr style="background:#f0ece4!important;"><td colspan="3" style="font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);padding:8px 14px;">Other assets</td></tr>
+        <tr>
+          <td><span class="seg-type">item</span>_<span class="seg-name">candle</span>.png</td>
+          <td><span class="tag tag-amber">Item</span></td>
+          <td>Candle item</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">bg</span>_<span class="seg-name">forest</span>_<span class="seg-variant">layer1</span>.png</td>
+          <td><span class="tag tag-purple">BG</span></td>
+          <td>Forest background — parallax layer 1</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">ui</span>_<span class="seg-name">button</span>_<span class="seg-variant">confirm</span>.png</td>
+          <td><span class="tag tag-red">UI</span></td>
+          <td>Confirm button UI element</td>
+        </tr>
+        <tr>
+          <td><span class="seg-type">ui</span>_<span class="seg-name">icon</span>_<span class="seg-variant">aura_noise</span>.png</td>
+          <td><span class="tag tag-red">UI</span></td>
+          <td>Noise aura indicator icon</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ul class="rule-list">
+      <li class="info"><span class="rule-icon-sm">ℹ️</span><span>Client sheets contain everything — body parts for the skeleton AND expression frames for the face. Godot defines regions from a single texture. One file per character, no splits.</span></li>
+      <li class="warn"><span class="rule-icon-sm">⚠️</span><span>If a second version coexists with the first for a real reason, use <code>_v2</code> suffix. If v2 replaces v1, simply overwrite — Git keeps the history.</span></li>
+    </ul>
+  </div>
+
+  <!-- AUDIO -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Audio</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">.ogg for music · .wav for sfx</span>
+    </div>
+
+    <div class="pattern-box">
+      <span class="pattern-label">Pattern — SFX</span>
+      <div class="pattern"><span class="seg-type">sfx</span>_<span class="seg-name">category</span>_<span class="seg-variant">description</span><span class="seg-ext">.wav</span></div>
+    </div>
+    <div class="pattern-box" style="border-left-color: var(--blue); margin-top: -8px;">
+      <span class="pattern-label">Pattern — Music</span>
+      <div class="pattern"><span class="seg-type">music</span>_<span class="seg-name">zone</span>_<span class="seg-variant">mood</span><span class="seg-ext">.ogg</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Filename</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>sfx_client_satisfied.wav</td><td><span class="tag tag-green">SFX</span></td><td>Client satisfaction sound</td></tr>
+        <tr><td>sfx_client_unsatisfied.wav</td><td><span class="tag tag-green">SFX</span></td><td>Client unsatisfied sound</td></tr>
+        <tr><td>sfx_room_place.wav</td><td><span class="tag tag-green">SFX</span></td><td>Room placement sound</td></tr>
+        <tr><td>sfx_ui_click.wav</td><td><span class="tag tag-green">SFX</span></td><td>UI click</td></tr>
+        <tr><td>music_zone1_ambient.ogg</td><td><span class="tag tag-blue">Music</span></td><td>Zone 1 ambient loop</td></tr>
+        <tr><td>music_boss_zone1.ogg</td><td><span class="tag tag-blue">Music</span></td><td>Boss fight music — zone 1</td></tr>
+        <tr><td>music_hub_ambient.ogg</td><td><span class="tag tag-blue">Music</span></td><td>Hub ambient loop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SCENES & SCRIPTS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Scenes & Scripts</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">.tscn · .gd · must match each other</span>
+    </div>
+
+    <div class="pattern-box">
+      <span class="pattern-label">Pattern — Scene</span>
+      <div class="pattern"><span class="seg-name">descriptive_name</span><span class="seg-ext">.tscn</span></div>
+    </div>
+    <div class="pattern-box" style="border-left-color: var(--amber); margin-top: -8px;">
+      <span class="pattern-label">Pattern — Script</span>
+      <div class="pattern"><span class="seg-name">same_as_scene</span><span class="seg-ext">.gd</span>&nbsp;&nbsp;<span style="color:var(--text-muted);font-size:0.78rem;">— script must always match its scene name</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Scene</th><th>Script</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>fresno_nightcrawler.tscn</td><td>fresno_nightcrawler.gd</td><td>Fresno Nightcrawler client</td></tr>
+        <tr><td>room_base.tscn</td><td>room_base.gd</td><td>Base room scene</td></tr>
+        <tr><td>ui_hud.tscn</td><td>ui_hud.gd</td><td>HUD scene</td></tr>
+        <tr><td>game_manager.tscn</td><td>game_manager.gd</td><td>Global game manager</td></tr>
+        <tr><td>aura_system.tscn</td><td>aura_system.gd</td><td>Aura propagation system</td></tr>
+        <tr><td>day_cycle_manager.tscn</td><td>day_cycle_manager.gd</td><td>Day cycle manager</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FOLDER STRUCTURE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Folder Structure</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">res:// root · Godot project</span>
+    </div>
+
+    <div class="tree">
+      <div><span class="tree-folder">📁 assets/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 sprites/</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 clients/</span><span class="tree-comment">// all client PNGs</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 rooms/</span><span class="tree-comment">// all room PNGs</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 items/</span><span class="tree-comment">// all item PNGs</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 ui/</span><span class="tree-comment">// buttons, panels, icons, aura indicators</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 backgrounds/</span><span class="tree-comment">// bg parallax layers</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 others/</span><span class="tree-comment">// Other PNGs comme la base de l'hotel</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 audio/</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 music/</span><span class="tree-comment">// .ogg files</span></div>
+      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 sfx/</span><span class="tree-comment">// .wav files</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 fonts/</span><span class="tree-comment">// .ttf / .otf</span></div>
+      <div><span class="tree-folder">📁 scenes/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 clients/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 rooms/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 ui/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 managers/</span></div>
+      <div><span class="tree-folder">📁 scripts/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 clients/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 rooms/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 ui/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 managers/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 systems/</span><span class="tree-comment">// aura, day cycle, satisfaction</span></div>
+    </div>
+  </div>
+
+  <!-- DON'TS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Common Mistakes</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="dont-list">
+      <div class="dont-row">
+        <span class="dont-bad">Fresno Nightcrawler.png</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">client_fresno_nightcrawler.png</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">room-bedroom-final.PNG</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">room_bedroom_placeholder.png</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">sound effect click v3.wav</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">sfx_ui_click.wav</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">BG_Forest_Layer1_FINAL.png</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">bg_forest_layer1.png</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">NewScript2.gd</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">aura_system.gd</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">clientFresnoNightcrawler.tscn</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">fresno_nightcrawler.tscn</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — File Naming Conventions v1.0</div>
+    <div>All Teams · Art & Dev</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div>
+<script src="navbar.js"></script>
+</body>
+</html>
