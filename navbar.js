@@ -62,7 +62,7 @@
     const nav = document.createElement('nav');
     nav.className = 'site-nav' + (isBottom ? ' nav-bottom' : '');
     nav.innerHTML = `
-      <a href="index.html" class="nav-home">
+      <a href="../index.html" class="nav-home">
         <span class="nav-arrow">←</span>
         Home
       </a>
