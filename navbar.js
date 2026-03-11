@@ -10,6 +10,9 @@
       padding: 0 4px;
       font-family: 'DM Sans', sans-serif;
     }
+    .site-nav.nav-bottom {
+      margin: 0 auto 24px;
+    }
     .site-nav a.nav-home {
       display: flex;
       align-items: center;
@@ -55,17 +58,21 @@
   const breadcrumb = document.title ? document.title.replace('Cryptid Hotel — ', '') : '';
 
   // ── Build navbar HTML ────────────────────────────────────────────────────
-  const nav = document.createElement('nav');
-  nav.className = 'site-nav';
-  nav.innerHTML = `
-    <a href="index.html" class="nav-home">
-      <span class="nav-arrow">←</span>
-      Home
-    </a>
-    <div class="nav-divider"></div>
-    ${breadcrumb ? `<span class="nav-breadcrumb">${breadcrumb}</span>` : ''}
-  `;
+  function createNav(isBottom) {
+    const nav = document.createElement('nav');
+    nav.className = 'site-nav' + (isBottom ? ' nav-bottom' : '');
+    nav.innerHTML = `
+      <a href="index.html" class="nav-home">
+        <span class="nav-arrow">←</span>
+        Home
+      </a>
+      <div class="nav-divider"></div>
+      ${breadcrumb ? `<span class="nav-breadcrumb">${breadcrumb}</span>` : ''}
+    `;
+    return nav;
+  }
 
-  // ── Insert before the first element in <body> ────────────────────────────
-  document.body.insertBefore(nav, document.body.firstChild);
+  // ── Insert at top and bottom of <body> ───────────────────────────────────
+  document.body.insertBefore(createNav(false), document.body.firstChild);
+  document.body.appendChild(createNav(true));
 })();
