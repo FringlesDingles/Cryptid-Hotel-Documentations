@@ -74,9 +74,11 @@
   .parallax-layer-num { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); width: 24px; flex-shrink: 0; }
   .parallax-bar-wrap { flex: 1; height: 28px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
   .parallax-bar { height: 100%; display: flex; align-items: center; padding-left: 10px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: white; }
-  .l0 .parallax-bar { background: #382a5a; width: 15%; }
-  .l1 .parallax-bar { background: #2a3d5a; width: 30%; } .l2 .parallax-bar { background: #3a5a4a; width: 55%; }
-  .l3 .parallax-bar { background: #5a4a2a; width: 80%; } .l4 .parallax-bar { background: #6a3a2a; width: 100%; }
+.l0 { background: var(--paper-dark); } .l0 .parallax-bar { background: #382a5a; width: 15%; }
+  .l1 { background: var(--paper-dark); } .l1 .parallax-bar { background: #2a3d5a; width: 30%; }
+  .l2 { background: var(--paper-dark); } .l2 .parallax-bar { background: #3a5a4a; width: 55%; }
+  .l3 { background: var(--paper-dark); } .l3 .parallax-bar { background: #5a4a2a; width: 80%; }
+  .l4 { background: var(--paper-dark); } .l4 .parallax-bar { background: #6a3a2a; width: 100%; }
   .parallax-info { width: 220px; flex-shrink: 0; }
   .parallax-info-title { font-size: 0.8rem; font-weight: 500; color: var(--ink); display: block; }
   .parallax-info-sub { font-size: 0.72rem; color: var(--text-muted); }
@@ -137,6 +139,7 @@
   .inspo-medium { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
   .med-comic { background: var(--accent-muted); color: var(--accent); }
   .med-game  { background: var(--blue-light); color: var(--blue); }
+  .med-web  { background: var(--green-light); color: var(--green); }
   .inspo-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 9px; }
   .inspo-tags { display: flex; flex-wrap: wrap; gap: 5px; }
   .itag { font-size: 0.61rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; background: rgba(42,58,90,0.07); color: var(--blue); border: 1px solid rgba(42,58,90,0.13); }
@@ -312,7 +315,7 @@
       <div class="inspo-card">
         <img src="https://media.discordapp.net/attachments/1467670258851643466/1480199268303376466/il_300x300.5184816363_3nqz.png?ex=69b1717e&is=69b01ffe&hm=0a0bfc8feb841fde6d136d712754a17008cae4518db5bd8adaf9f2a0106f2f91&=&format=webp&quality=lossless" style="height:160px;width:100%;object-fit:cover;display:block;">
           <div class="inspo-body" style="display:flex;flex-direction:column;justify-content:center;">
-            <div class="inspo-title">Folklore<span class="inspo-medium med-game">Web</span></div>
+            <div class="inspo-title">Folklore<span class="inspo-medium med-web">Web</span></div>
             <p class="inspo-desc">Style Folklore populaire</p>
          </div>
       </div>
@@ -320,7 +323,7 @@
       <div class="inspo-card">
         <img src="https://media.discordapp.net/attachments/1467670258851643466/1481034979495510097/image.png?ex=69b1d8cf&is=69b0874f&hm=6b864d09f1813f7b18335d35df91aac17e53add61b0fe16a86db58f95df1c448&=&format=webp&quality=lossless" style="height:160px;width:100%;object-fit:cover;display:block;">
           <div class="inspo-body" style="display:flex;flex-direction:column;justify-content:center;">
-            <div class="inspo-title">Scribbled<span class="inspo-medium med-game">Web</span></div>
+            <div class="inspo-title">Scribbled<span class="inspo-medium med-web">Web</span></div>
             <p class="inspo-desc">Style plutot Scribbled</p>
          </div>
       </div>

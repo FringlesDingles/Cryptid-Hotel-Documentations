@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — Coding Conventions</title>
+<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/800658962127126528/1481055240961917089/og-icon.png?ex=69b1ebae&is=69b09a2e&hm=253dfcb46010b3ade00ce29c4b593c2dc65a57cee041bea71b05d9e01ff3ce67&=&format=webp&quality=lossless">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e; --ink-light: #2e2e4a; --paper: #f5f0e8; --paper-dark: #ede7d9;
+    --accent: #c45c3a; --accent-light: #e8785a; --accent-muted: #f0cfc4;
+    --rule: #c8bfaf; --text: #2a2535; --text-muted: #7a7068;
+    --green: #3a6b4a; --green-light: #cfe8d8;
+    --blue: #2a4a7a; --blue-light: #d0dff0;
+    --amber: #b87a20; --amber-light: #f5e8cc;
+    --purple: #5a3a7a; --purple-light: #e8d8f5;
+    --mono: 'DM Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; }
+  .page { max-width: 900px; margin: 40px auto; background: var(--paper); box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1); padding: 64px 72px; position: relative; }
+  .page::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px); pointer-events: none; z-index: 0; }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* CORE RULES BOX */
+  .rules-box { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 2px; margin-bottom: 44px; }
+  .rules-box .rules-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; display: block; }
+  .rules-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px; }
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rule-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; font-size: 0.88rem; }
+  .rule-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .rule-title { font-weight: 500; color: #f0ece4; display: block; margin-bottom: 2px; }
+  .rule-desc { font-size: 0.78rem; color: #8a8070; line-height: 1.5; }
+
+  /* CODE BLOCK */
+  .code-block { background: var(--ink); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: rgba(0,0,0,0.25); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .code-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #5a5470; }
+  .copy-btn { font-family: var(--mono); font-size: 0.65rem; padding: 3px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; color: #5a5470; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+  .copy-btn:hover { color: #a09880; border-color: rgba(255,255,255,0.2); }
+  .copy-btn.copied { color: #5ac870; border-color: rgba(58,200,112,0.4); }
+  .code-body { padding: 20px 22px; font-family: var(--mono); font-size: 0.82rem; line-height: 2; color: #c8c0b0; white-space: pre; overflow-x: auto; }
+
+  /* SYNTAX */
+  .kw  { color: #c47a5a; }
+  .fn  { color: #8ab4e8; }
+  .sig { color: #c8a0e8; }
+  .cl  { color: #e8c878; }
+  .en  { color: #5ac8c8; }
+  .cm  { color: #4a4860; font-style: italic; }
+  .num { color: #e8a060; }
+  .op  { color: #7a7490; }
+  .type{ color: #e8c878; }
+  .var { color: #d0c8b8; }
+  .gm  { color: #5ac870; }
+  .bm  { color: #e87070; }
+
+  /* NAMING TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: var(--paper-dark); }
+  tbody tr:nth-child(odd)  { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: middle; }
+  tbody td:first-child { font-family: var(--mono); font-size: 0.82rem; font-weight: 500; color: var(--ink); }
+  tbody td:nth-child(2) { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin: 1px; }
+  .tag-green  { background: var(--green-light);  color: var(--green);  }
+  .tag-blue   { background: var(--blue-light);   color: var(--blue);   }
+  .tag-amber  { background: var(--amber-light);  color: var(--amber);  }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-red    { background: #f5d8d8; color: #7a2a2a; }
+
+  /* STRUCTURE LIST */
+  .structure-list { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+  .structure-item { display: grid; grid-template-columns: 36px 220px 1fr; align-items: center; gap: 0; padding: 11px 16px; border-bottom: 1px solid var(--rule); }
+  .structure-item:last-child { border-bottom: none; }
+  .structure-item:nth-child(odd)  { background: var(--paper); }
+  .structure-item:nth-child(even) { background: var(--paper-dark); }
+  .structure-num  { font-family: 'DM Serif Display', serif; font-size: 0.78rem; color: var(--accent); font-style: italic; }
+  .structure-name { font-family: var(--mono); font-size: 0.82rem; font-weight: 500; }
+  .structure-example { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); }
+
+  /* DONTS */
+  .dont-list { display: flex; flex-direction: column; gap: 8px; }
+  .dont-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 14px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; }
+  .dont-bad  { font-family: var(--mono); font-size: 0.82rem; color: #7a2a2a; text-decoration: line-through; text-decoration-color: rgba(180,60,60,0.4); }
+  .dont-arrow { color: var(--text-muted); text-align: center; }
+  .dont-good { font-family: var(--mono); font-size: 0.82rem; color: var(--green); }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  code { font-family: var(--mono); font-size: 0.82rem; background: var(--paper-dark); padding: 1px 5px; border-radius: 2px; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="doc-tag">Cryptid Hotel — Internal Dev Doc</span>
+      <h1>Coding<br>Conventions</h1>
+      <div class="doc-subtitle">Dev team only · Read before writing a single line</div>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Engine</strong> Godot 4.6 · GDScript</div>
+      <div><strong>Applies to</strong> Dev team</div>
+      <div><strong>Updated</strong> March 2026</div>
+    </div>
+  </div>
+
+  <!-- CORE RULES BOX -->
+  <div class="rules-box">
+    <span class="rules-tag">Core Rules — No Exceptions</span>
+    <h2>Before writing anything</h2>
+    <div class="rules-grid">
+      <div class="rule-item">
+        <span class="rule-icon">🔡</span>
+        <div>
+          <span class="rule-title">Always type hint</span>
+          <span class="rule-desc">Every variable and every function return must have a type. No bare <code style="background:rgba(255,255,255,0.08);color:#c8c0b0;">var x</code>.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">🐍</span>
+        <div>
+          <span class="rule-title">snake_case everywhere</span>
+          <span class="rule-desc">Variables, functions, signals, file names. Only classes and enum names use PascalCase.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">📐</span>
+        <div>
+          <span class="rule-title">Script structure order</span>
+          <span class="rule-desc">Always follow the defined order. class_name → signals → enums → constants → exported variables → public variables → private variables → functions.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">💬</span>
+        <div>
+          <span class="rule-title">Comment why, not what</span>
+          <span class="rule-desc">The code says what. Comments explain design decisions and non-obvious intent only.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 NAMING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Naming Conventions</h2>
+      <div class="section-rule"></div>
+    </div>
+    <table>
+      <thead><tr><th>Case</th><th>Example</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>snake_case</td>
+          <td>noise_level, check_satisfaction</td>
+          <td><span class="tag tag-green">variables</span> <span class="tag tag-blue">functions</span> <span class="tag tag-purple">signals</span> <span class="tag tag-red">files</span></td>
+        </tr>
+        <tr>
+          <td>PascalCase</td>
+          <td>FresnoNightcrawler, AuraType</td>
+          <td><span class="tag tag-amber">class_name</span> <span class="tag tag-amber">enum names</span></td>
+        </tr>
+        <tr>
+          <td>SCREAMING_SNAKE</td>
+          <td>MAX_CLIENTS, BASE_DAMAGE</td>
+          <td><span class="tag tag-red">constants</span> <span class="tag tag-red">enum values</span></td>
+        </tr>
+        <tr>
+          <td>_snake_case</td>
+          <td>_cached_value, _calculate_aura</td>
+          <td><span class="tag tag-purple">private vars</span> <span class="tag tag-purple">private funcs</span></td>
+        </tr>
+        <tr>
+          <td>is_ / has_ / can_</td>
+          <td>is_satisfied, has_aura, can_place</td>
+          <td><span class="tag tag-green">booleans</span></td>
+        </tr>
+        <tr>
+          <td>past tense</td>
+          <td>day_ended, client_placed, room_removed</td>
+          <td><span class="tag tag-purple">all signals</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 02 VARIABLES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Variables</h2>
+      <div class="section-rule"></div>
+    </div>
+<div class="code-block">
+      <div class="code-header"><span class="code-label">Variables · always type hint</span><button class="copy-btn" onclick="copyBlock(this)">copy</button></div>
+      <div class="code-body"><span class="cm"># Constant</span>
+<span class="kw">const</span> <span class="en">MAX_ITEMS_PER_ROOM</span><span class="op">:</span> <span class="type">int</span> <span class="op">=</span> <span class="num">4</span>
+
+<span class="cm"># Exported variable — inspector-visible</span>
+<span class="op">@</span><span class="kw">export</span> <span class="kw">var</span> <span class="var">client_race</span><span class="op">:</span> <span class="type">ClientRace</span> <span class="op">=</span> <span class="num">ClientRace.YETI</span>
+
+<span class="cm"># Public variable — typed, initialized</span>
+<span class="kw">var</span> <span class="var">is_noisy</span><span class="op">:</span> <span class="type">bool</span> <span class="op">=</span> <span class="num">false</span>
+<span class="kw">var</span> <span class="var">room_count</span><span class="op">:</span> <span class="type">int</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">var</span> <span class="var">is_satisfied</span><span class="op">:</span> <span class="type">bool</span> <span class="op">=</span> <span class="num">false</span>
+
+<span class="cm"># Private variable — underscore prefix</span>
+<span class="kw">var</span> <span class="var">_cached_aura</span><span class="op">:</span> <span class="type">int</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">var</span> <span class="var">_adjacent_rooms</span><span class="op">:</span> <span class="type">Array</span><span class="op">[</span><span class="cl">RoomBase</span><span class="op">]</span> <span class="op">=</span> <span class="op">[]</span>
+
+<span class="bm"># ❌ Never do this</span>
+<span class="kw">var</span> <span class="bm">n</span> <span class="op">=</span> <span class="num">0</span>             <span class="cm"># no name, no type</span>
+<span class="kw">var</span> <span class="bm">satisfied</span> <span class="op">=</span> <span class="num">false</span>  <span class="cm"># boolean needs is_ prefix + type hint</span></div>
+    </div>
+  </div>
+
+  <!-- 03 FUNCTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Functions</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">Functions · typed params + return</span><button class="copy-btn" onclick="copyBlock(this)">copy</button></div>
+      <div class="code-body"><span class="cm"># Public function — typed params, typed return</span>
+<span class="kw">func</span> <span class="fn">check_satisfaction</span>(client<span class="op">:</span> <span class="cl">ClientBase</span>) <span class="op">-></span> <span class="type">bool</span><span class="op">:</span>
+    <span class="kw">return</span> client<span class="op">.</span><span class="fn">has_all_requirements_met</span>()
+
+<span class="cm"># Void function — explicit void return type</span>
+<span class="kw">func</span> <span class="fn">place_client</span>(client<span class="op">:</span> <span class="cl">ClientBase</span>, room<span class="op">:</span> <span class="cl">RoomBase</span>) <span class="op">-></span> <span class="type">void</span><span class="op">:</span>
+    room<span class="op">.</span><span class="fn">add_client</span>(client)
+
+<span class="cm"># Private function — underscore prefix</span>
+<span class="kw">func</span> <span class="fn">_calculate_aura_spread</span>(origin<span class="op">:</span> <span class="type">Vector2i</span>) <span class="op">-></span> <span class="type">Array</span><span class="op">[</span><span class="cl">RoomBase</span><span class="op">]</span><span class="op">:</span>
+    <span class="kw">pass</span>
+
+<span class="bm"># ❌ Never do this</span>
+<span class="kw">func</span> <span class="bm">doStuff</span>()<span class="op">:</span>        <span class="cm"># camelCase, no types</span>
+    <span class="kw">pass</span>
+<span class="kw">func</span> <span class="bm">go</span>() <span class="op">-></span> <span class="type">void</span><span class="op">:</span>     <span class="cm"># meaningless name</span>
+    <span class="kw">pass</span></div>
+    </div>
+  </div>
+
+  <!-- 04 SIGNALS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Signals</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">past tense · typed params</span>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">Signals</span><button class="copy-btn" onclick="copyBlock(this)">copy</button></div>
+      <div class="code-body"><span class="cm"># Past tense — something already happened</span>
+<span class="kw">signal</span> <span class="sig">client_placed</span>(client<span class="op">:</span> <span class="cl">ClientBase</span>, room<span class="op">:</span> <span class="cl">RoomBase</span>)
+<span class="kw">signal</span> <span class="sig">day_ended</span>(day_number<span class="op">:</span> <span class="type">int</span>)
+<span class="kw">signal</span> <span class="sig">client_satisfied</span>(client<span class="op">:</span> <span class="cl">ClientBase</span>)
+<span class="kw">signal</span> <span class="sig">room_placed</span>(room<span class="op">:</span> <span class="cl">RoomBase</span>, grid_pos<span class="op">:</span> <span class="type">Vector2i</span>)
+<span class="kw">signal</span> <span class="sig">aura_spread</span>(aura_type<span class="op">:</span> <span class="cl">AuraType</span>, origin<span class="op">:</span> <span class="type">Vector2i</span>)
+<span class="kw">signal</span> <span class="sig">damage_taken</span>(amount<span class="op">:</span> <span class="type">int</span>)
+
+<span class="bm"># ❌ Never do this</span>
+<span class="kw">signal</span> <span class="bm">dayEnd</span>           <span class="cm"># camelCase, no params</span>
+<span class="kw">signal</span> <span class="bm">on_client_happy</span>  <span class="cm"># on_ is for listeners, not declarations</span></div>
+    </div>
+  </div>
+
+  <!-- 05 ENUMS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Enums</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">PascalCase name · SCREAMING values</span>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">Enums</span><button class="copy-btn" onclick="copyBlock(this)">copy</button></div>
+      <div class="code-body"><span class="kw">enum</span> <span class="cl">AuraType</span> <span class="op">{</span>
+    <span class="en">DARKNESS</span><span class="op">,</span> <span class="en">FEAR</span><span class="op">,</span> <span class="en">NOISE</span><span class="op">,</span> <span class="en">COLD</span><span class="op">,</span> <span class="en">HUNGER</span><span class="op">,</span> <span class="en">NEARBY_CLIENTS</span>
+<span class="op">}</span>
+
+<span class="kw">enum</span> <span class="cl">ClientRace</span> <span class="op">{</span>
+    <span class="en">FRESNO_NIGHTCRAWLER</span><span class="op">,</span> <span class="en">WENDIGO</span><span class="op">,</span> <span class="en">GIANT_CICADA</span><span class="op">,</span>
+    <span class="en">YETI</span><span class="op">,</span> <span class="en">HOPKINSVILLE_GOBLIN</span><span class="op">,</span> <span class="en">MODDEY_DOO</span>
+<span class="op">}</span>
+
+<span class="kw">enum</span> <span class="cl">ZoneID</span> <span class="op">{</span> <span class="en">ZONE_1</span><span class="op">,</span> <span class="en">ZONE_2</span><span class="op">,</span> <span class="en">ZONE_3</span><span class="op">,</span> <span class="en">ZONE_4</span> <span class="op">}</span>
+
+<span class="bm"># ❌ Never do this</span>
+<span class="kw">enum</span> <span class="bm">auratype</span> <span class="op">{</span> <span class="bm">noise</span><span class="op">,</span> <span class="bm">cold</span> <span class="op">}</span>  <span class="cm"># lowercase name, lowercase values</span></div>
+    </div>
+  </div>
+
+  <!-- 06 COMMENTS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Comments</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">explain why · not what</span>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">Comment style</span><button class="copy-btn" onclick="copyBlock(this)">copy</button></div>
+      <div class="code-body"><span class="gm"># ✅</span> <span class="cm">Aura spreads to 4 adjacent rooms only — diagonals ignored by design</span>
+<span class="kw">func</span> <span class="fn">_spread_aura</span>(origin<span class="op">:</span> <span class="type">Vector2i</span>) <span class="op">-></span> <span class="type">void</span><span class="op">:</span>
+    <span class="kw">pass</span>
+
+<span class="gm"># ✅</span> <span class="cm">Damage resolves at end of day only, not in real time</span>
+<span class="cm">#    Avoids mid-day state changes breaking the satisfaction check</span>
+<span class="kw">func</span> <span class="fn">_resolve_day_end</span>() <span class="op">-></span> <span class="type">void</span><span class="op">:</span>
+    <span class="kw">pass</span>
+
+<span class="bm"># ❌</span> <span class="cm">Increment room count by 1   ← restates the code, useless</span>
+room_count <span class="op">+=</span> <span class="num">1</span>
+
+<span class="gm"># ✅</span> <span class="cm">Section separator for long scripts</span>
+<span class="cm"># ============================================================</span>
+<span class="cm"># AURA SYSTEM</span>
+<span class="cm"># ============================================================</span>
+
+<span class="gm"># ✅</span> <span class="cm">TODO's and FIXME's</span>
+<span class="cm"># TODO : replace placeholder with real satisfaction formula</span>
+<span class="cm"># FIXME: aura not propagating correctly on room removal</span></div>
+    </div>
+  </div>
+
+  <!-- 07 STRUCTURE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Script Structure Order</h2>
+      <div class="section-rule"></div>
+      <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">always in this exact order</span>
+    </div>
+    <div class="structure-list">
+      <div class="structure-item">
+        <span class="structure-num">01</span>
+        <span class="structure-name" style="color:var(--blue);">class_name + extends</span>
+        <span class="structure-example">class_name FresnoNightcrawler extends ClientBase</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">02</span>
+        <span class="structure-name" style="color:var(--purple);">signals</span>
+        <span class="structure-example">signal client_satisfied(client: ClientBase)</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">03</span>
+        <span class="structure-name" style="color:var(--amber);">enums</span>
+        <span class="structure-example">enum AuraType { NOISE, COLD ... }</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">04</span>
+        <span class="structure-name" style="color:var(--green);">constants</span>
+        <span class="structure-example">const MAX_CLIENTS: int = 10</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">05</span>
+        <span class="structure-name" style="color:var(--green);">@export variables</span>
+        <span class="structure-example">@export var base_fear: float = 0.0</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">06</span>
+        <span class="structure-name" style="color:var(--green);">public variables</span>
+        <span class="structure-example">var room_count: int = 0</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">07</span>
+        <span class="structure-name" style="color:var(--text-muted);">private variables</span>
+        <span class="structure-example">var _cached_value: int = 0</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">08</span>
+        <span class="structure-name" style="color:var(--accent);">_ready() · _init()</span>
+        <span class="structure-example">built-in Godot callbacks first</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">09</span>
+        <span class="structure-name" style="color:var(--accent);">_process() · _physics_process()</span>
+        <span class="structure-example">frame callbacks</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">10</span>
+        <span class="structure-name" style="color:var(--blue);">public functions</span>
+        <span class="structure-example">func place_room() -> void:</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">11</span>
+        <span class="structure-name" style="color:var(--text-muted);">private functions</span>
+        <span class="structure-example">func _calculate_aura() -> int:</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 DON'TS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Common Mistakes</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="dont-list">
+      <div class="dont-row">
+        <span class="dont-bad">var n = 3</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">var attack_damage: int = 3</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">func doStuff():</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">func check_satisfaction() -> bool:</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">var satisfied = false</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">var is_satisfied: bool = false</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">class_name nightcrawler</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">class_name FresnoNightcrawler</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">signal dayEnd</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">signal day_ended(day_number: int)</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad">enum auratype { noise, cold }</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">enum AuraType { NOISE, COLD }</span>
+      </div>
+      <div class="dont-row">
+        <span class="dont-bad"># increment room count by 1</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good"># room added after day end only, not mid-day</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — Coding Conventions v1.0</div>
+    <div>Dev Team · GDScript · Godot 4.6</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div>
+<script>
+  function copyBlock(btn) {
+    const block = btn.closest('.code-block').querySelector('.code-body');
+    navigator.clipboard.writeText(block.innerText).then(() => {
+      btn.textContent = 'copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+<script src="navbar.js"></script>
+</body>
+</html>
