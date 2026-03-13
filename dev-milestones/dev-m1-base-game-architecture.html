@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — Dev M1 Base Game Architecture</title>
+<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/800658962127126528/1481055240961917089/og-icon.png?ex=69b1ebae&is=69b09a2e&hm=253dfcb46010b3ade00ce29c4b593c2dc65a57cee041bea71b05d9e01ff3ce67&=&format=webp&quality=lossless">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e; --ink-light: #2e2e4a; --paper: #f5f0e8; --paper-dark: #ede7d9;
+    --accent: #c45c3a; --accent-light: #e8785a; --accent-muted: #f0cfc4;
+    --rule: #c8bfaf; --text: #2a2535; --text-muted: #7a7068;
+    --green: #3a6b4a; --green-light: #cfe8d8;
+    --blue: #2a4a7a; --blue-light: #d0dff0;
+    --amber: #b87a20; --amber-light: #f5e8cc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; }
+  .page { max-width: 900px; margin: 40px auto; background: var(--paper); box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1); padding: 64px 72px; position: relative; }
+  .page::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px); pointer-events: none; z-index: 0; }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* MILESTONE BOX */
+  .milestone-box { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 2px; margin-bottom: 44px; }
+  .milestone-box .milestone-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; display: block; }
+  .milestone-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px; }
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .milestone-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; font-size: 0.88rem; color: #d8d0c0; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .milestone-item:hover { background: rgba(255,255,255,0.1); }
+  .milestone-item.checked { background: rgba(58,107,74,0.25) !important; border-color: rgba(58,180,100,0.4) !important; }
+  .milestone-item.special { grid-column: span 2; border-color: rgba(196,92,58,0.3); background: rgba(196,92,58,0.08); }
+  .milestone-item.special .check { border-color: var(--accent-light); }
+  .milestone-item input[type="checkbox"] { display: none; }
+  .milestone-item .check { width: 18px; height: 18px; border: 1.5px solid rgba(196,92,58,0.6); border-radius: 2px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; position: relative; }
+  .milestone-item.checked .check { background: #3a9a5a; border-color: #3a9a5a; }
+  .milestone-item.checked .check::after { content: ''; display: block; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }
+  .item-label { font-weight: 400; color: #f0ece4; transition: color 0.15s; }
+  .milestone-item.checked .item-label { color: #8ac8a0; text-decoration: line-through; text-decoration-color: rgba(138,200,160,0.5); }
+  .item-note { font-size: 0.78rem; color: #8a8070; margin-top: 2px; }
+  .milestone-progress { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #3a9a5a; border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+  .progress-label { font-size: 0.72rem; color: #8a8070; white-space: nowrap; min-width: 60px; text-align: right; }
+  .progress-label span { color: #3a9a5a; font-weight: 500; }
+
+  /* RULE LIST */
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .rule-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; padding: 10px 14px; background: var(--paper-dark); border-left: 3px solid var(--rule); }
+  .rule-list li.good { border-left-color: var(--green); background: var(--green-light); }
+  .rule-list li.info { border-left-color: var(--blue); background: var(--blue-light); }
+  .rule-list li.warn { border-left-color: var(--amber); background: var(--amber-light); }
+  .rule-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: var(--paper-dark); }
+  tbody tr:nth-child(odd) { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: top; }
+  tbody td:first-child { font-weight: 500; color: var(--ink); }
+
+  /* SPEC CARDS */
+  .spec-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .spec-card { border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 18px 16px; background: var(--paper-dark); border-radius: 0 0 2px 2px; }
+  .spec-card.blue { border-top-color: var(--blue); }
+  .spec-card.green { border-top-color: var(--green); }
+  .spec-card.amber { border-top-color: var(--amber); }
+  .spec-card-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .spec-card-value { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); line-height: 1.2; margin-bottom: 6px; }
+  .spec-card-note { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* PILLS */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pill { display: inline-block; padding: 3px 11px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; border: 1px solid; }
+  .pill-dark   { background: #1a1a2e18; color: #1a1a2e; border-color: #1a1a2e44; }
+  .pill-cold   { background: #d0dff0; color: var(--blue); border-color: #2a4a7a44; }
+  .pill-noise  { background: #f5e8cc; color: var(--amber); border-color: #b87a2044; }
+  .pill-fear   { background: #f0cfc4; color: var(--accent); border-color: #c45c3a44; }
+  .pill-hunger { background: #cfe8d8; color: var(--green); border-color: #3a6b4a44; }
+  .pill-nearby { background: #ede7d9; color: #5a4a3a; border-color: #8a7a6a44; }
+
+  /* INLINE CODE */
+  code { font-family: monospace; font-size: 0.8rem; background: var(--paper-dark); border: 1px solid var(--rule); padding: 1px 6px; border-radius: 2px; color: var(--ink); }
+
+  /* CONVENTION LINKS */
+  .convention-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .convention-card { border: 1px solid var(--rule); border-top: 3px solid var(--blue); padding: 18px 16px; background: var(--paper-dark); border-radius: 0 0 2px 2px; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.15s; }
+  .convention-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.1); }
+  .convention-card-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .convention-card-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 6px; }
+  .convention-card-link { font-size: 0.75rem; color: var(--blue); font-family: monospace; }
+
+  /* ROOM GRID DIAGRAM */
+  .room-diagram { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 14px; background: var(--paper-dark); padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .room-row { display: flex; gap: 4px; }
+  .room-cell { width: 64px; height: 40px; border: 1.5px solid var(--rule); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); background: var(--paper); }
+  .room-cell.occupied { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .room-cell.reception { background: var(--ink); border-color: var(--ink); color: #f5f0e8; }
+  .room-cell.aura { background: #f0cfc4; border-color: var(--accent); color: var(--accent); }
+  .room-cell.empty { background: var(--paper-dark); border-style: dashed; }
+  .room-diagram-legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  @media print { body { background: white; } .page { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="doc-tag">Internal — Dev Team</span>
+      <h1>Cryptid Hotel</h1>
+      <p class="doc-subtitle">Dev Milestone 1 — Base Game Architecture</p>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Phase</strong> Dev M1 — Base Game</div>
+      <div><strong>Engine</strong> Godot 4.6</div>
+      <div><strong>Date</strong> Mar 13, 2026</div>
+    </div>
+  </div>
+
+  <!-- MILESTONE CHECKLIST -->
+  <div class="milestone-box">
+    <span class="milestone-tag">Dev Milestone 1 — Base Game</span>
+    <h2>Task List</h2>
+    <div class="milestone-grid" id="milestone-grid">
+      <div class="milestone-item" data-id="project-folder"><div class="check"></div><div><div class="item-label">Project Folder Structure</div></div></div>
+      <div class="milestone-item" data-id="game-architecture"><div class="check"></div><div><div class="item-label">Game Architecture</div></div></div>
+      <div class="milestone-item" data-id="base-game-scene"><div class="check"></div><div><div class="item-label">Base Game Scene</div></div></div>
+      <div class="milestone-item" data-id="base-room-grid"><div class="check"></div><div><div class="item-label">Base Room Grid System</div></div></div>
+      <div class="milestone-item" data-id="camera-system"><div class="check"></div><div><div class="item-label">Camera System</div></div></div>
+      <div class="milestone-item" data-id="night-cycle"><div class="check"></div><div><div class="item-label">Day/Night Cycle System</div></div></div>
+      <div class="milestone-item" data-id="reception-move"><div class="check"></div><div><div class="item-label">Move Reception Room Logic from Room.gd</div></div></div>
+      <div class="milestone-item" data-id="client-component"><div class="check"></div><div><div class="item-label">Client Component</div></div></div>
+      <div class="milestone-item" data-id="room-component"><div class="check"></div><div><div class="item-label">Room Component</div></div></div>
+      <div class="milestone-item" data-id="room-relation"><div class="check"></div><div><div class="item-label">Room Relation System</div></div></div>
+      <div class="milestone-item" data-id="damage-system"><div class="check"></div><div><div class="item-label">Damage System</div></div></div>
+      <div class="milestone-item" data-id="requirement-system"><div class="check"></div><div><div class="item-label">Requirement System</div></div></div>
+      <div class="milestone-item" data-id="aura-system"><div class="check"></div><div><div class="item-label">Aura System</div></div></div>
+      <div class="milestone-item" data-id="client-moving"><div class="check"></div><div><div class="item-label">Client Moving System</div></div></div>
+      <div class="milestone-item" data-id="client-spawner"><div class="check"></div><div><div class="item-label">Client Spawner System</div></div></div>
+    </div>
+    <div class="milestone-progress">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-label"><span id="progress-count">0</span> / 16 completed</div>
+    </div>
+  </div>
+
+  <!-- SECTION 01: DAY CYCLE -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">01</span><h2>Day/Night Cycle System</h2><div class="section-rule"></div></div>
+    <table style="margin-bottom:14px;">
+      <thead><tr><th>Phase</th><th>Name</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Morning — Arrival</td><td>A set number of clients spawn at Floor 0 (Reception). Each are unique with their randomized requirements.</td></tr>
+        <tr><td>2</td><td>Day — Assignment</td><td>Player assigns clients into rooms (Besides the Reception Room).</td></tr>
+        <tr><td>3</td><td>Night — Resolution</td><td>Each client's requirements are evaluated to their current state. Satisfied → reward. Unsatisfied → player takes damage.</td></tr>
+      </tbody>
+    </table>
+    <ul class="rule-list">
+      <li class="warn"><span class="rule-icon">!</span><span>The <strong>Day/Night Cycle System</strong> is the time keeper that will at specific times do certain actions such as spawning clients or calculating damage for the moment, more to come</span></li>
+      <li class="warn"><span class="rule-icon">!</span><span>New Clients spawn in the Reception Room, starting from the right towards the left</span></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 02: REQUIREMENT & AURA -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">02</span><h2>Requirement & Aura System</h2><div class="section-rule"></div></div>
+
+    <div class="spec-grid-2" style="margin-bottom:16px;">
+      <div class="spec-card blue">
+        <span class="spec-card-label">Requirements</span>
+        <div class="spec-card-value">Likes / Dislikes</div>
+        <div class="spec-card-note">Each client has a set of Likes/Hates requirements. A requirement only matters if the client explicitly has it. A client with no opinion on a type is completely unaffected by that type's aura.</div>
+      </div>
+      <div class="spec-card amber">
+        <span class="spec-card-label">Auras</span>
+        <div class="spec-card-value">4 Orthogonal Neighbors</div>
+        <div class="spec-card-note">Clients and items can emit an aura of a given type. It spreads to the 4 directly adjacent rooms (Up, Down, Left, Right). Diagonals are not affected for now.</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div style="font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">All Requirement & Aura Types</div>
+      <div class="pill-row">
+        <span class="pill pill-dark">🌑 Darkness</span>
+        <span class="pill pill-fear">👁 Fear</span>
+        <span class="pill pill-noise">🔊 Noise</span>
+        <span class="pill pill-cold">❄ Cold</span>
+        <span class="pill pill-hunger">🍖 Hunger</span>
+        <span class="pill pill-nearby">👥 Nearby Clients</span>
+      </div>
+    </div>
+
+    <ul class="rule-list">
+      <li class="good"><span class="rule-icon">✓</span><span><strong>Satisfaction rule:</strong> A client is satisfied only when <em>all</em> of their requirements are fulfilled. A single unmet requirement makes them unsatisfied.</span></li>
+      <li class="info"><span class="rule-icon">i</span><span>A <strong>Like</strong> means the condition must be present in the room. A <strong>Hate</strong> means it must be absent.</span></li>
+      <li><span class="rule-icon">—</span><span>Auras recalculate whenever a client or room is placed or moved. The Aura System feeds into the Requirement System at resolution time.</span></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 03: ROOM SYSTEM -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">03</span><h2>Room System</h2><div class="section-rule"></div></div>
+
+    <div class="room-diagram">
+      <div class="room-row">
+        <div class="room-cell empty"></div>
+        <div class="room-cell aura">aura</div>
+        <div class="room-cell empty"></div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell aura">aura</div>
+        <div class="room-cell occupied">Room ★</div>
+        <div class="room-cell aura">aura</div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell empty"></div>
+        <div class="room-cell aura">aura</div>
+        <div class="room-cell occupied">Room</div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell reception" style="width: 200px;">Floor 0 — Reception</div>
+      </div>
+      <div class="room-diagram-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-light);border:1.5px solid var(--blue);"></div>Occupied room</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f0cfc4;border:1.5px solid var(--accent);"></div>Aura spread (4 neighbors)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--paper-dark);border:1.5px dashed var(--rule);"></div>Empty slot</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--ink);"></div>Reception (Floor 0)</div>
+      </div>
+    </div>
+
+    <table style="margin-bottom:14px;">
+      <thead><tr><th>Script / System</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td><code>room.gd</code></td><td>Core room node. Holds client references, item slots, room type, and tracks active conditions based on innate properties and received auras.</td></tr>
+        <tr><td>Room Relation System</td><td>Tracks orthogonal adjacency between all placed rooms. Primary source of truth for aura propagation and Nearby Clients checks.</td></tr>
+        <tr><td><code>hotel_grid.gd</code></td><td>Manages grid placement logic, room validity checks, and the overall hotel shape. Currently also handles reception setup — to be extracted later.</td></tr>
+        <tr><td>Reception Room</td><td>Floor 0 special room. Fixed, not player-modifiable. Spans 3 grid cells. Reception logic currently lives in <code>hotel_grid.gd</code> and will be moved to its own file.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- SECTION 04: CONVENTIONS -->
+  <div class="section">
+    <div class="section-header"><span class="section-num">04</span><h2>Conventions & Guidelines</h2><div class="section-rule"></div></div>
+    <ul class="rule-list" style="margin-bottom:18px;">
+      <li class="info"><span class="rule-icon">i</span><span>All code, files, and Godot scenes must follow the team conventions documented in the pages linked below. Refer to them before naming anything or structuring a new script.</span></li>
+    </ul>
+    <div class="convention-cards">
+      <a class="convention-card" href="../guidelines-and-normes/coding-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">Coding Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/coding-conventions.html</div>
+      </a>
+      <a class="convention-card" href="../guidelines-and-normes/file-naming-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">File Naming Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/file-naming-conventions.html</div>
+      </a>
+      <a class="convention-card" href="../guidelines-and-normes/godot-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">Godot Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/godot-conventions.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — Dev Milestone 1 — Base Game Architecture v1.0</div>
+    <div>Dev M1 - Base Game Architecture</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div>
+<script>
+  const STORAGE_KEY = 'cryptid-hotel-dev-m1-architecture';
+  let memChecked = [];
+
+  function getChecked() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return memChecked; }
+  }
+  function saveChecked(ids) {
+    memChecked = ids;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); } catch {}
+  }
+  function updateProgress() {
+    const total = document.querySelectorAll('.milestone-item').length;
+    const done  = document.querySelectorAll('.milestone-item.checked').length;
+    document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+    document.getElementById('progress-count').textContent = done;
+  }
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    const id = el.dataset.id;
+    let checked = getChecked();
+    if (el.classList.contains('checked')) { if (!checked.includes(id)) checked.push(id); }
+    else { checked = checked.filter(x => x !== id); }
+    saveChecked(checked);
+    updateProgress();
+  }
+  function init() {
+    getChecked().forEach(id => { const el = document.querySelector(`.milestone-item[data-id="${id}"]`); if (el) el.classList.add('checked'); });
+    document.querySelectorAll('.milestone-item').forEach(el => el.addEventListener('click', () => toggleCheck(el)));
+    updateProgress();
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+</script>
+<script src="../navbar.js"></script>
+</body>
+</html>
