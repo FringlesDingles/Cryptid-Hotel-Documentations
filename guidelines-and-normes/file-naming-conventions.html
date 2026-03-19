@@ -81,6 +81,7 @@
   /* FOLDER TREE */
   .tree { background: var(--ink); border-radius: 2px; padding: 24px 28px; font-family: var(--mono); font-size: 0.82rem; line-height: 2; }
   .tree-folder { color: var(--amber-light); }
+  .tree-file { color: #c8c0b0; }
   .tree-comment { color: #4a4560; font-style: italic; margin-left: 8px; }
   .tree-indent { color: #3a3550; user-select: none; }
 
@@ -329,31 +330,42 @@
       <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;">res:// root · Godot project</span>
     </div>
 
-    <div class="tree">
-      <div><span class="tree-folder">📁 assets/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 sprites/</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 clients/</span><span class="tree-comment">// all client PNGs</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 rooms/</span><span class="tree-comment">// all room PNGs</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 items/</span><span class="tree-comment">// all item PNGs</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 ui/</span><span class="tree-comment">// buttons, panels, icons, aura indicators</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 backgrounds/</span><span class="tree-comment">// bg parallax layers</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 others/</span><span class="tree-comment">// Other PNGs comme la base de l'hotel</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 audio/</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 music/</span><span class="tree-comment">// .ogg files</span></div>
-      <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 sfx/</span><span class="tree-comment">// .wav files</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 fonts/</span><span class="tree-comment">// .ttf / .otf</span></div>
-      <div><span class="tree-folder">📁 scenes/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 clients/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 rooms/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 ui/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 managers/</span></div>
-      <div><span class="tree-folder">📁 scripts/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 clients/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 rooms/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 ui/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 managers/</span></div>
-      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 systems/</span><span class="tree-comment">// aura, day cycle, satisfaction</span></div>
-    </div>
+<div class="tree">
+  <div><span class="tree-folder">📁 assets/</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-folder">📁 sprites/</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 clients/</span><span class="tree-comment">// all client PNGs</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 rooms/</span><span class="tree-comment">// all room PNGs</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 items/</span><span class="tree-comment">// all item PNGs</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 ui/</span><span class="tree-comment">// buttons, panels, icons, aura indicators</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 backgrounds/</span><span class="tree-comment">// bg parallax layers</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 others/</span><span class="tree-comment">// Other PNGs comme la base de l'hotel</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-folder">📁 audio/</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 music/</span><span class="tree-comment">// .ogg files</span></div>
+  <div><span class="tree-indent">│  │  </span><span class="tree-folder">📁 sfx/</span><span class="tree-comment">// .wav files</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-folder">📁 fonts/</span><span class="tree-comment">// .ttf / .otf</span></div>
+  <div><span class="tree-folder">📁 clients/</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">fresno_nightcrawler.tscn</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">fresno_nightcrawler.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">wendigo.tscn</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">wendigo.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-comment">// ... one .tscn + .gd pair per race</span></div>
+  <div><span class="tree-folder">📁 rooms/</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">room_base.tscn</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">room_base.gd</span></div>
+  <div><span class="tree-folder">📁 ui/</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">hud.tscn</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">hud.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">day_summary.tscn</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">day_summary.gd</span></div>
+  <div><span class="tree-folder">📁 managers/</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">game_state.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">day_manager.gd</span></div>
+  <div><span class="tree-folder">📁 systems/</span><span class="tree-comment">// aura, day cycle, satisfaction</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">aura_system.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">satisfaction_system.gd</span></div>
+  <div><span class="tree-indent">│  </span><span class="tree-file">day_cycle_system.gd</span></div>
+  <div><span class="tree-folder">📁 addons/</span><span class="tree-comment">// third-party plugins only</span></div>
+</div>
   </div>
 
   <!-- DON'TS -->
