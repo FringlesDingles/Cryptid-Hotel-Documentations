@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — [DOC TITLE]</title>
+<link rel="icon" type="image/png" href="../icone_website.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  /* ============================================================
+     DESIGN TOKENS — do not change these
+     ============================================================ */
+  :root {
+    --ink: #1a1a2e;        --ink-light: #2e2e4a;
+    --paper: #f5f0e8;      --paper-dark: #ede7d9;
+    --accent: #c45c3a;     --accent-light: #e8785a;   --accent-muted: #f0cfc4;
+    --rule: #c8bfaf;       --text: #2a2535;            --text-muted: #7a7068;
+    --green: #3a6b4a;      --green-light: #cfe8d8;
+    --blue: #2a4a7a;       --blue-light: #d0dff0;
+    --amber: #b87a20;      --amber-light: #f5e8cc;
+    --purple: #5a3a7a;     --purple-light: #e8d8f5;
+    --teal: #1a5a5a;       --teal-light: #cce8e8;
+    --mono: 'DM Mono', monospace;
+  }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #d8d0c0;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* Paper page */
+  .page {
+    max-width: 900px; margin: 40px auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1);
+    padding: 64px 72px;
+    position: relative;
+  }
+  /* Lined-paper texture */
+  .page::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 27px,
+      rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px
+    );
+    pointer-events: none; z-index: 0;
+  }
+  .page > * { position: relative; z-index: 1; }
+
+  /* ============================================================
+     HEADER  (always present)
+     ============================================================ */
+  .doc-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 28px; margin-bottom: 40px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  /* Small ALL-CAPS label above the title  e.g. "Internal — Dev Team" */
+  .doc-tag {
+    font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px; display: block;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px;
+  }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  /* Right-side meta block  e.g. Version / Engine / Date */
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* ============================================================
+     SECTION WRAPPER  (repeatable)
+     ============================================================ */
+  .section { margin-bottom: 44px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+  }
+  /* Italic serif number  e.g. "01" */
+  .section-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px;
+  }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  /* Thin horizontal rule that fills the remaining space */
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+  /* Optional small right-aligned sub-label */
+  .section-sub { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; }
+  /* Generic body paragraph inside a section */
+  .body-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.7; }
+
+  /* ============================================================
+     DARK HERO BOX  (milestone checklist, intro objective, core rules)
+     Used as the first prominent block after the header.
+     ============================================================ */
+  .hero-box {
+    background: var(--ink); color: var(--paper);
+    padding: 28px 32px; border-radius: 2px; margin-bottom: 44px;
+  }
+  .hero-box .hero-tag {
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent-light);
+    margin-bottom: 8px; display: block;
+  }
+  .hero-box h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px;
+  }
+  /* 2-column grid inside the hero box */
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* Generic item card inside the hero box */
+  .hero-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 2px; font-size: 0.88rem;
+  }
+  .hero-item.span2 { grid-column: span 2; }
+  /* Accent-border variant for special items */
+  .hero-item.special {
+    border-color: rgba(196,92,58,0.3);
+    background: rgba(196,92,58,0.08);
+  }
+  .hero-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .hero-item-title { font-weight: 500; color: #f0ece4; display: block; margin-bottom: 2px; font-size: 0.88rem; }
+  .hero-item-desc  { font-size: 0.78rem; color: #8a8070; line-height: 1.5; }
+
+  /* ── Milestone checklist variant ── */
+  .milestone-item {
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    color: #d8d0c0;
+  }
+  .milestone-item:hover { background: rgba(255,255,255,0.1) !important; }
+  .milestone-item.checked {
+    background: rgba(58,107,74,0.25) !important;
+    border-color: rgba(58,180,100,0.4) !important;
+  }
+  .milestone-item .check {
+    width: 18px; height: 18px;
+    border: 1.5px solid rgba(196,92,58,0.6);
+    border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .milestone-item.checked .check { background: #3a9a5a; border-color: #3a9a5a; }
+  .milestone-item.checked .check::after {
+    content: ''; display: block;
+    width: 5px; height: 9px;
+    border: 2px solid white; border-top: none; border-left: none;
+    transform: rotate(45deg) translate(-1px,-1px);
+  }
+  .milestone-item.special .check { border-color: var(--accent-light); }
+  .item-label { font-weight: 400; color: #f0ece4; transition: color 0.15s; }
+  .milestone-item.checked .item-label {
+    color: #8ac8a0;
+    text-decoration: line-through;
+    text-decoration-color: rgba(138,200,160,0.5);
+  }
+  .item-note { font-size: 0.78rem; color: #8a8070; margin-top: 2px; }
+  /* Progress bar */
+  .milestone-progress { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #3a9a5a; border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+  .progress-label { font-size: 0.72rem; color: #8a8070; white-space: nowrap; min-width: 60px; text-align: right; }
+  .progress-label span { color: #3a9a5a; font-weight: 500; }
+
+  /* ============================================================
+     RULE LIST  (info / good / warn banners)
+     ============================================================ */
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .rule-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 0.88rem; padding: 10px 14px;
+    background: var(--paper-dark); border-left: 3px solid var(--rule);
+  }
+  .rule-list li.good { border-left-color: var(--green);  background: var(--green-light); }
+  .rule-list li.info { border-left-color: var(--blue);   background: var(--blue-light);  }
+  .rule-list li.warn { border-left-color: var(--amber);  background: var(--amber-light); }
+  .rule-list li.danger{ border-left-color: var(--accent); background: var(--accent-muted);}
+  .rule-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ============================================================
+     TABLE  (zebra striped, dark header)
+     ============================================================ */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th {
+    padding: 10px 14px; text-align: left;
+    font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  tbody tr:nth-child(even) { background: var(--paper-dark); }
+  tbody tr:nth-child(odd)  { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: middle; }
+  tbody td:first-child { font-weight: 500; color: var(--ink); }
+  /* Section row inside a table body */
+  .table-group-row td {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 8px 14px; background: #f0ece4 !important;
+  }
+
+  /* ============================================================
+     TAGS / PILLS
+     ============================================================ */
+  /* Rectangular tags — used inline in tables, phase headers, etc. */
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 2px;
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 1px;
+    font-family: var(--mono);
+  }
+  .tag-green  { background: var(--green-light);  color: var(--green);  }
+  .tag-blue   { background: var(--blue-light);   color: var(--blue);   }
+  .tag-amber  { background: var(--amber-light);  color: var(--amber);  }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-teal   { background: var(--teal-light);   color: var(--teal);   }
+  .tag-red    { background: #f5d8d8; color: #7a2a2a; }
+  .tag-ink    { background: var(--ink); color: var(--paper); }
+
+  /* Rounded pills — used for requirement/aura type indicators */
+  .pill {
+    display: inline-block; padding: 3px 11px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; border: 1px solid;
+  }
+  .pill-dark   { background: #1a1a2e18; color: #1a1a2e; border-color: #1a1a2e44; }
+  .pill-cold   { background: #d0dff0;   color: var(--blue);   border-color: #2a4a7a44; }
+  .pill-noise  { background: #f5e8cc;   color: var(--amber);  border-color: #b87a2044; }
+  .pill-fear   { background: #f0cfc4;   color: var(--accent); border-color: #c45c3a44; }
+  .pill-hunger { background: #cfe8d8;   color: var(--green);  border-color: #3a6b4a44; }
+  .pill-nearby { background: #ede7d9;   color: #5a4a3a;       border-color: #8a7a6a44; }
+  .pill-row    { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+  /* ============================================================
+     INLINE CODE
+     ============================================================ */
+  code {
+    font-family: var(--mono); font-size: 0.82rem;
+    background: var(--paper-dark); border: 1px solid var(--rule);
+    padding: 1px 6px; border-radius: 2px; color: var(--ink);
+  }
+
+  /* ============================================================
+     SPEC CARDS  (stat / info cards in 2- or 3-col grid)
+     ============================================================ */
+  .spec-grid-2 { display: grid; grid-template-columns: 1fr 1fr;       gap: 14px; margin-bottom: 14px; }
+  .spec-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 14px; }
+  .spec-card {
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    padding: 18px 16px;
+    background: var(--paper-dark);
+    border-radius: 0 0 2px 2px;
+  }
+  .spec-card.blue   { border-top-color: var(--blue);   }
+  .spec-card.green  { border-top-color: var(--green);  }
+  .spec-card.amber  { border-top-color: var(--amber);  }
+  .spec-card.purple { border-top-color: var(--purple); }
+  .spec-card.teal   { border-top-color: var(--teal);   }
+  .spec-card-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .spec-card-value { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); line-height: 1.2; margin-bottom: 6px; }
+  .spec-card-note  { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ============================================================
+     STRUCTURE LIST  (numbered rows — script order, success criteria, pipeline)
+     ============================================================ */
+  .structure-list { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .structure-item {
+    display: grid; grid-template-columns: 32px 220px 1fr;
+    align-items: start; padding: 11px 16px; border-bottom: 1px solid var(--rule);
+  }
+  .structure-item:last-child { border-bottom: none; }
+  .structure-item:nth-child(odd)  { background: var(--paper); }
+  .structure-item:nth-child(even) { background: var(--paper-dark); }
+  .structure-num  { font-family: 'DM Serif Display', serif; font-size: 0.78rem; color: var(--accent); font-style: italic; padding-top: 1px; }
+  .structure-name { font-family: var(--mono); font-size: 0.80rem; font-weight: 500; color: var(--ink); padding-right: 12px; padding-top: 1px; }
+  .structure-desc { font-size: 0.80rem; color: var(--text-muted); line-height: 1.55; }
+
+  /* ============================================================
+     DON'T / DO COMPARISON ROWS
+     ============================================================ */
+  .dont-list { display: flex; flex-direction: column; gap: 8px; }
+  .dont-row {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 12px;
+    padding: 10px 14px; background: var(--paper-dark);
+    border: 1px solid var(--rule); border-radius: 2px;
+  }
+  .dont-bad  { font-family: var(--mono); font-size: 0.82rem; color: #7a2a2a; text-decoration: line-through; text-decoration-color: rgba(180,60,60,0.4); }
+  .dont-arrow{ color: var(--text-muted); text-align: center; }
+  .dont-good { font-family: var(--mono); font-size: 0.82rem; color: var(--green); }
+
+  /* ============================================================
+     SCOPE LIST  (in-scope ✓ / out-of-scope ✗)
+     ============================================================ */
+  .scope-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .scope-row {
+    display: grid; grid-template-columns: 20px 1fr;
+    gap: 10px; padding: 10px 14px;
+    border: 1px solid var(--rule); border-radius: 2px;
+    align-items: start; font-size: 0.84rem;
+  }
+  .scope-row.in  { background: var(--green-light); border-color: #a0c8b0; }
+  .scope-row.out { background: #f5d8d8;            border-color: #d8a8a8; }
+  .scope-icon { font-size: 0.85rem; padding-top: 2px; }
+  .scope-text { color: var(--text); line-height: 1.5; }
+  .scope-text em { color: var(--text-muted); font-style: italic; font-size: 0.80rem; }
+
+  /* ============================================================
+     PHASE BLOCKS  (development phases)
+     ============================================================ */
+  .phase-block { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
+  .phase-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: var(--paper-dark); border-bottom: 1px solid var(--rule);
+  }
+  .phase-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); }
+  .phase-body  { padding: 12px 16px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+  .phase-deliverables { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule); display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ============================================================
+     FLOW / PIPELINE  (vertical step-by-step diagram)
+     ============================================================ */
+  .flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+  .flow-step { display: grid; grid-template-columns: 32px 1fr; gap: 0 14px; }
+  .flow-spine { display: flex; flex-direction: column; align-items: center; }
+  .flow-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif; font-size: 0.75rem;
+    color: var(--accent); font-style: italic;
+    background: var(--paper); flex-shrink: 0;
+  }
+  .flow-line { width: 1px; flex: 1; min-height: 10px; background: var(--rule); margin: 3px 0; }
+  .flow-card {
+    background: var(--paper-dark); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px; margin-bottom: 5px; border-radius: 2px;
+  }
+  .flow-card-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .flow-card-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); }
+  .flow-card-body  { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+  .flow-card-why { margin-top: 10px; padding: 8px 12px; background: var(--paper); border-left: 2px solid var(--amber); font-size: 0.80rem; color: var(--text-muted); line-height: 1.6; }
+  .flow-card-why strong { font-size: 0.70rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); display: block; margin-bottom: 2px; }
+  /* Color variants for flow steps */
+  .fc-blue   .flow-dot { border-color: var(--blue);   color: var(--blue);   }
+  .fc-blue   .flow-card{ border-left-color: var(--blue);   }
+  .fc-teal   .flow-dot { border-color: var(--teal);   color: var(--teal);   }
+  .fc-teal   .flow-card{ border-left-color: var(--teal);   }
+  .fc-amber  .flow-dot { border-color: var(--amber);  color: var(--amber);  }
+  .fc-amber  .flow-card{ border-left-color: var(--amber);  }
+  .fc-purple .flow-dot { border-color: var(--purple); color: var(--purple); }
+  .fc-purple .flow-card{ border-left-color: var(--purple); }
+  .fc-green  .flow-dot { border-color: var(--green);  color: var(--green);  }
+  .fc-green  .flow-card{ border-left-color: var(--green);  }
+
+  /* ============================================================
+     RISK / SAFEGUARD LIST  (icon + title + body)
+     ============================================================ */
+  .safeguard-list { display: flex; flex-direction: column; gap: 8px; }
+  .safeguard-row {
+    display: grid; grid-template-columns: 28px 1fr; gap: 12px;
+    padding: 12px 16px; background: var(--paper-dark);
+    border: 1px solid var(--rule); border-radius: 2px; align-items: start;
+  }
+  .safeguard-icon  { font-size: 0.95rem; padding-top: 2px; }
+  .safeguard-title { font-weight: 500; color: var(--ink); font-size: 0.88rem; margin-bottom: 3px; }
+  .safeguard-body  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ============================================================
+     OPEN QUESTIONS  (amber-accented Q&A list)
+     ============================================================ */
+  .question-list { display: flex; flex-direction: column; gap: 6px; }
+  .question-row {
+    display: grid; grid-template-columns: 20px 1fr; gap: 12px;
+    padding: 11px 16px; background: var(--paper-dark);
+    border: 1px solid var(--rule); border-left: 3px solid var(--amber);
+    border-radius: 2px; align-items: start;
+  }
+  .question-mark { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--amber); font-style: italic; padding-top: 1px; }
+  .question-text { font-size: 0.88rem; color: var(--ink); }
+  .question-sub  { font-size: 0.76rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }
+
+  /* ============================================================
+     PATTERN BOX  (naming convention pattern display)
+     ============================================================ */
+  .pattern-box {
+    background: var(--paper-dark); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent); border-radius: 2px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  .pattern-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: block; }
+  .pattern { font-family: var(--mono); font-size: 1rem; color: var(--ink); line-height: 1.8; }
+  /* Colour-coded pattern segments */
+  .seg-type    { color: var(--green);  font-weight: 500; }
+  .seg-name    { color: var(--amber);  font-weight: 500; }
+  .seg-variant { color: var(--blue);   font-weight: 500; }
+  .seg-state   { color: var(--purple); font-weight: 500; }
+  .seg-ext     { color: var(--text-muted); }
+
+  /* ============================================================
+     CODE BLOCK  (dark, copyable, syntax-highlighted)
+     ============================================================ */
+  .code-block { background: var(--ink); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .code-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px; background: rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .code-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #5a5470; }
+  .copy-btn {
+    font-family: var(--mono); font-size: 0.65rem; padding: 3px 10px;
+    background: transparent; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 2px; color: #5a5470; cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .copy-btn:hover  { color: #a09880; border-color: rgba(255,255,255,0.2); }
+  .copy-btn.copied { color: #5ac870; border-color: rgba(58,200,112,0.4); }
+  .code-body {
+    padding: 20px 22px; font-family: var(--mono); font-size: 0.82rem;
+    line-height: 2; color: #c8c0b0; white-space: pre; overflow-x: auto;
+  }
+  /* GDScript syntax colours */
+  .kw  { color: #c47a5a; }   /* keyword */
+  .fn  { color: #8ab4e8; }   /* function name */
+  .sig { color: #c8a0e8; }   /* signal name */
+  .cl  { color: #e8c878; }   /* class name */
+  .en  { color: #5ac8c8; }   /* enum value */
+  .cm  { color: #4a4860; font-style: italic; } /* comment */
+  .num { color: #e8a060; }   /* number / literal */
+  .op  { color: #7a7490; }   /* operator / punctuation */
+  .type{ color: #e8c878; }   /* type annotation */
+  .var { color: #d0c8b8; }   /* variable name */
+  .gm  { color: #5ac870; }   /* good marker ✅ */
+  .bm  { color: #e87070; }   /* bad marker ❌ */
+
+  /* ============================================================
+     FOLDER TREE  (dark monospace directory listing)
+     ============================================================ */
+  .tree {
+    background: var(--ink); border-radius: 2px;
+    padding: 24px 28px; font-family: var(--mono);
+    font-size: 0.82rem; line-height: 2;
+  }
+  .tree-folder  { color: var(--amber-light); }
+  .tree-file    { color: #c8c0b0; }
+  .tree-comment { color: #4a4560; font-style: italic; margin-left: 8px; }
+  .tree-indent  { color: #3a3550; user-select: none; }
+
+  /* ============================================================
+     PARALLAX DIAGRAM  (layer speed chart — art docs)
+     ============================================================ */
+  .parallax-diagram { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .parallax-layer { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--rule); gap: 16px; }
+  .parallax-layer:last-child { border-bottom: none; }
+  .parallax-layer-num { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); width: 24px; flex-shrink: 0; }
+  .parallax-bar-wrap { flex: 1; height: 28px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+  .parallax-bar { height: 100%; display: flex; align-items: center; padding-left: 10px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: white; }
+  .parallax-info { width: 220px; flex-shrink: 0; }
+  .parallax-info-title { font-size: 0.8rem; font-weight: 500; color: var(--ink); display: block; }
+  .parallax-info-sub   { font-size: 0.72rem; color: var(--text-muted); }
+  .parallax-speed { width: 80px; flex-shrink: 0; text-align: right; font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ============================================================
+     ROOM GRID DIAGRAM  (hotel layout visualisation — dev docs)
+     ============================================================ */
+  .room-diagram {
+    border: 1px solid var(--rule); border-radius: 2px; overflow: hidden;
+    margin-bottom: 14px; background: var(--paper-dark);
+    padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .room-row { display: flex; gap: 4px; }
+  .room-cell {
+    width: 64px; height: 40px;
+    border: 1.5px solid var(--rule); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--text-muted); background: var(--paper);
+  }
+  .room-cell.occupied  { background: var(--blue-light);  border-color: var(--blue);   color: var(--blue);   }
+  .room-cell.reception { background: var(--ink);          border-color: var(--ink);    color: #f5f0e8; }
+  .room-cell.aura      { background: #f0cfc4;             border-color: var(--accent); color: var(--accent); }
+  .room-cell.empty     { background: var(--paper-dark); border-style: dashed; }
+  .room-diagram-legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+  .legend-item  { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); }
+  .legend-dot   { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ============================================================
+     INSPIRATION CARDS  (art reference grid)
+     ============================================================ */
+  .inspo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .inspo-grid-3 { grid-template-columns: repeat(3,1fr); }
+  .inspo-card { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; background: var(--paper-dark); transition: box-shadow 0.2s; }
+  .inspo-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.12); }
+  .inspo-placeholder { width: 100%; height: 130px; background: var(--paper-dark); border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: center; }
+  .inspo-placeholder span { font-size: 0.75rem; color: var(--rule); letter-spacing: 0.15em; font-family: monospace; user-select: none; }
+  .inspo-body { padding: 12px 14px 14px; }
+  .inspo-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); margin-bottom: 5px; display: flex; align-items: baseline; gap: 8px; }
+  .inspo-medium { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+  .med-comic { background: var(--accent-muted); color: var(--accent); }
+  .med-game  { background: var(--blue-light);   color: var(--blue);   }
+  .med-web   { background: var(--green-light);  color: var(--green);  }
+  .inspo-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 9px; }
+  .inspo-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .itag { font-size: 0.61rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; background: rgba(42,58,90,0.07); color: var(--blue); border: 1px solid rgba(42,58,90,0.13); }
+  .itag.w { background: rgba(196,92,58,0.07);  color: var(--accent); border-color: rgba(196,92,58,0.17); }
+  .itag.d { background: rgba(26,26,46,0.07);   color: var(--ink);    border-color: rgba(26,26,46,0.17);  }
+  .itag.a { background: var(--amber-light);    color: var(--amber);  border-color: rgba(184,122,32,0.2); }
+  /* Callout box below the inspo grid */
+  .inspo-note-box { margin-top: 16px; padding: 12px 16px; background: var(--amber-light); border-left: 3px solid var(--amber); font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+  .inspo-note-box strong { color: var(--amber); font-weight: 500; }
+
+  /* ============================================================
+     CONVENTION LINK CARDS  (cross-document links)
+     ============================================================ */
+  .convention-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .convention-card {
+    border: 1px solid var(--rule); border-top: 3px solid var(--blue);
+    padding: 18px 16px; background: var(--paper-dark);
+    border-radius: 0 0 2px 2px; text-decoration: none;
+    color: inherit; display: block; transition: box-shadow 0.15s;
+  }
+  .convention-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.1); }
+  .convention-card-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .convention-card-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 6px; }
+  .convention-card-link  { font-size: 0.75rem; color: var(--blue); font-family: monospace; }
+
+  /* ============================================================
+     INDEX DOC LIST  (used on the hub index page)
+     ============================================================ */
+  .doc-list { display: flex; flex-direction: column; gap: 4px; }
+  .doc-entry {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 10px 14px; background: var(--paper-dark);
+    border-left: 3px solid var(--rule);
+    text-decoration: none; color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .doc-entry:hover { background: var(--paper); }
+  .doc-entry:hover .doc-entry-arrow { transform: translateX(3px); color: var(--accent); }
+  .doc-entry.blue:hover   { border-left-color: var(--blue);   }
+  .doc-entry.green:hover  { border-left-color: var(--green);  }
+  .doc-entry.amber:hover  { border-left-color: var(--amber);  }
+  .doc-entry.accent:hover { border-left-color: var(--accent); }
+  .doc-entry.purple:hover { border-left-color: var(--purple); }
+  .doc-entry-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); min-width: 110px; flex-shrink: 0; }
+  .doc-entry-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); flex: 1; }
+  .doc-entry-desc  { font-size: 0.78rem; color: var(--text-muted); }
+  .doc-entry-arrow { font-size: 0.75rem; color: var(--rule); transition: transform 0.15s, color 0.15s; flex-shrink: 0; }
+
+  /* ============================================================
+     FOOTER  (always present)
+     ============================================================ */
+  .doc-footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem; color: var(--text-muted);
+  }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  /* ============================================================
+     PRINT
+     ============================================================ */
+  @media print { body { background: white; } .page { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER  — always keep this block, fill in your doc info
+       ══════════════════════════════════════════════════════════ -->
+  <div class="doc-header">
+    <div>
+      <!--
+        doc-tag    : Team & category label  e.g. "Internal — Dev Team" / "Internal — Art Team" / "Cryptid Hotel — Internal Dev Doc"
+        h1         : Short document title. Can use <br> for 2 lines.
+        doc-subtitle: One-line description
+      -->
+      <span class="doc-tag">Internal — [Team]</span>
+      <h1>[Document<br>Title]</h1>
+      <p class="doc-subtitle">[One-line description of this document]</p>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Phase</strong>   [Milestone / Phase label]</div>
+      <div><strong>Engine</strong>  Godot 4.6</div>
+      <div><strong>Date</strong>    [Month Year]</div>
+      <!--
+        Other possible meta rows:
+        <div><strong>Applies to</strong> Dev team</div>
+        <div><strong>Status</strong>     En développement</div>
+      -->
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO BOX — MILESTONE CHECKLIST VARIANT
+       Use when the doc tracks deliverable tasks (Dev / Art milestones).
+       Remove if not needed; replace with RULES VARIANT below instead.
+       ══════════════════════════════════════════════════════════ -->
+  <div class="hero-box">
+    <span class="hero-tag">[Milestone Label] — [Brief description]</span>
+    <h2>Task List</h2>
+
+    <div class="hero-grid" id="milestone-grid">
+      <!--
+        Each .milestone-item needs a unique data-id.
+        Add .special + grid-column:span 2 for a full-width special task.
+      -->
+      <div class="milestone-item" data-id="task-1">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Task label</div>
+          <div class="item-note">Optional sub-note</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="task-2">
+        <div class="check"></div>
+        <div><div class="item-label">Task label</div></div>
+      </div>
+      <!-- Full-width special task -->
+      <div class="milestone-item special" data-id="task-special">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Special Task — full width</div>
+          <div class="item-note">Longer description of this task</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="milestone-progress">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-label"><span id="progress-count">0</span> / [N] completed</div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO BOX — RULES / INTRO VARIANT
+       Use for convention docs, GDD intros, system overviews.
+       Remove the checklist hero above and use this instead.
+       ══════════════════════════════════════════════════════════ -->
+  <!--
+  <div class="hero-box">
+    <span class="hero-tag">Core Rules — No Exceptions</span>
+    <h2>Before doing anything</h2>
+    <div class="hero-grid">
+      <div class="hero-item">
+        <span class="hero-icon">🔡</span>
+        <div>
+          <span class="hero-item-title">Rule title</span>
+          <span class="hero-item-desc">Rule description.</span>
+        </div>
+      </div>
+      <div class="hero-item">
+        <span class="hero-icon">📐</span>
+        <div>
+          <span class="hero-item-title">Rule title</span>
+          <span class="hero-item-desc">Rule description.</span>
+        </div>
+      </div>
+      <div class="hero-item span2">
+        <span class="hero-icon">⚠️</span>
+        <div>
+          <span class="hero-item-title">Full-width rule</span>
+          <span class="hero-item-desc">Use span2 class for items that need the full width.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION TEMPLATE  (copy & repeat as many times as needed)
+       section-sub is optional — remove if not needed
+       ══════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Section Title</h2>
+      <div class="section-rule"></div>
+      <span class="section-sub">optional sub-label</span><!-- remove if not needed -->
+    </div>
+    <p class="body-text">Introductory paragraph for this section. Explain what this section covers.</p>
+
+    <!--
+      ─────────────────────────────────────────────────
+      PICK ONE OR MORE BLOCKS FROM THE CATALOGUE BELOW
+      and paste them here inside this .section div.
+      ─────────────────────────────────────────────────
+    -->
+
+    <!-- BLOCK: Rule list (info / good / warn / danger banners) -->
+    <ul class="rule-list">
+      <li class="good"><span class="rule-icon">✓</span><span><strong>Key point:</strong> Explanation.</span></li>
+      <li class="info"><span class="rule-icon">i</span><span>Informational note.</span></li>
+      <li class="warn"><span class="rule-icon">!</span><span>Warning note.</span></li>
+      <li class="danger"><span class="rule-icon">✗</span><span>Danger / error note.</span></li>
+      <li><span class="rule-icon">—</span><span>Neutral note.</span></li>
+    </ul>
+
+    <!-- BLOCK: Spec cards (2-col) -->
+    <div class="spec-grid-2">
+      <div class="spec-card blue">
+        <span class="spec-card-label">Label</span>
+        <div class="spec-card-value">Value / Name</div>
+        <div class="spec-card-note">Additional notes or description.</div>
+      </div>
+      <div class="spec-card amber">
+        <span class="spec-card-label">Label</span>
+        <div class="spec-card-value">Value / Name</div>
+        <div class="spec-card-note">Additional notes or description.</div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Spec cards (3-col) — uncomment to use -->
+    <!--
+    <div class="spec-grid-3">
+      <div class="spec-card"><span class="spec-card-label">Label</span><div class="spec-card-value">Value</div><div class="spec-card-note">Note.</div></div>
+      <div class="spec-card green"><span class="spec-card-label">Label</span><div class="spec-card-value">Value</div><div class="spec-card-note">Note.</div></div>
+      <div class="spec-card blue"><span class="spec-card-label">Label</span><div class="spec-card-value">Value</div><div class="spec-card-note">Note.</div></div>
+    </div>
+    -->
+
+    <!-- BLOCK: Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Column A</th>
+          <th>Column B</th>
+          <th>Column C</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Row 1 — A</td>
+          <td>Row 1 — B</td>
+          <td><span class="tag tag-blue">Tag</span> Row 1 — C</td>
+        </tr>
+        <tr>
+          <td>Row 2 — A</td>
+          <td>Row 2 — B</td>
+          <td>Row 2 — C</td>
+        </tr>
+        <!-- Section divider row inside a table -->
+        <tr class="table-group-row"><td colspan="3">Group label</td></tr>
+        <tr>
+          <td>Row 3 — A</td>
+          <td>Row 3 — B</td>
+          <td>Row 3 — C</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- BLOCK: Pill row (aura/requirement types) -->
+    <div style="font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">
+      Requirement / Aura Types
+    </div>
+    <div class="pill-row">
+      <span class="pill pill-dark">🌑 Darkness</span>
+      <span class="pill pill-fear">👁 Fear</span>
+      <span class="pill pill-noise">🔊 Noise</span>
+      <span class="pill pill-cold">❄ Cold</span>
+      <span class="pill pill-hunger">🍖 Hunger</span>
+      <span class="pill pill-nearby">👥 Nearby Clients</span>
+    </div>
+
+    <!-- BLOCK: Structure list (ordered items with name + description) -->
+    <div class="structure-list">
+      <div class="structure-item">
+        <span class="structure-num">1</span>
+        <span class="structure-name" style="color:var(--blue);">item_name</span>
+        <span class="structure-desc">Description of this item. Explain what it is and why it matters.</span>
+      </div>
+      <div class="structure-item">
+        <span class="structure-num">2</span>
+        <span class="structure-name" style="color:var(--green);">another_item</span>
+        <span class="structure-desc">Description of this item.</span>
+      </div>
+    </div>
+
+    <!-- BLOCK: Don't / Do rows -->
+    <div class="dont-list">
+      <div class="dont-row">
+        <span class="dont-bad">bad_example</span>
+        <span class="dont-arrow">→</span>
+        <span class="dont-good">good_example</span>
+      </div>
+    </div>
+
+    <!-- BLOCK: Scope list (in / out) -->
+    <p style="font-size:0.80rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);margin-bottom:8px;">✓ In scope</p>
+    <div class="scope-list">
+      <div class="scope-row in"><span class="scope-icon">✓</span><span class="scope-text">In-scope item description.</span></div>
+    </div>
+    <p style="font-size:0.80rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#7a2a2a;margin-bottom:8px;margin-top:16px;">✗ Out of scope</p>
+    <div class="scope-list">
+      <div class="scope-row out"><span class="scope-icon">✗</span><span class="scope-text">Out-of-scope item description.</span></div>
+    </div>
+
+    <!-- BLOCK: Phase blocks -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-title">Phase 1 — Name</span>
+        <span class="tag tag-blue">Phase 1</span>
+      </div>
+      <div class="phase-body">
+        Phase description.
+        <div class="phase-deliverables">
+          <span class="tag tag-blue">Deliverable A</span>
+          <span class="tag tag-blue">Deliverable B</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Flow / pipeline (vertical steps) -->
+    <div class="flow">
+      <div class="flow-step fc-blue">
+        <div class="flow-spine"><div class="flow-dot">A</div><div class="flow-line"></div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Step Title</div>
+              <span class="tag tag-blue">Phase</span>
+            </div>
+            <div class="flow-card-body">Step description explaining what happens here.</div>
+            <div class="flow-card-why"><strong>Why?</strong>Reason this step exists or design decision behind it.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step fc-amber">
+        <!-- Last step has no .flow-line -->
+        <div class="flow-spine"><div class="flow-dot">B</div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top"><div class="flow-card-title">Step Title</div><span class="tag tag-amber">Phase</span></div>
+            <div class="flow-card-body">Step description.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Safeguard / risk list -->
+    <div class="safeguard-list">
+      <div class="safeguard-row">
+        <span class="safeguard-icon">🔒</span>
+        <div>
+          <div class="safeguard-title">Safeguard title</div>
+          <div class="safeguard-body">Description of this safeguard and what risk it mitigates.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Open questions -->
+    <div class="question-list">
+      <div class="question-row">
+        <span class="question-mark">?</span>
+        <div>
+          <div class="question-text">The question that needs an answer.</div>
+          <div class="question-sub">Additional context or suggested answer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Pattern box (naming conventions) -->
+    <div class="pattern-box">
+      <span class="pattern-label">Pattern</span>
+      <div class="pattern">
+        <span class="seg-type">type</span>_<span class="seg-name">name</span>_<span class="seg-variant">variant</span><span class="seg-ext">.ext</span>
+        <span style="color:var(--text-muted);font-size:0.78rem;margin-left:12px;">— variant is optional</span>
+      </div>
+    </div>
+
+    <!-- BLOCK: Code block (copyable, with GDScript syntax) -->
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-label">GDScript · description</span>
+        <button class="copy-btn" onclick="copyBlock(this)">copy</button>
+      </div>
+      <div class="code-body"><span class="cm"># Example GDScript</span>
+<span class="kw">func</span> <span class="fn">example_function</span>(param<span class="op">:</span> <span class="type">int</span>) <span class="op">-></span> <span class="type">void</span><span class="op">:</span>
+    <span class="kw">pass</span></div>
+    </div>
+
+    <!-- BLOCK: Folder tree -->
+    <div class="tree">
+      <div><span class="tree-folder">📁 folder_name/</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-folder">📁 subfolder/</span><span class="tree-comment">// comment</span></div>
+      <div><span class="tree-indent">│  </span><span class="tree-file">file_name.gd</span></div>
+    </div>
+
+    <!-- BLOCK: Room grid diagram -->
+    <div class="room-diagram">
+      <div class="room-row">
+        <div class="room-cell empty"></div>
+        <div class="room-cell aura">aura</div>
+        <div class="room-cell empty"></div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell aura">aura</div>
+        <div class="room-cell occupied">Room ★</div>
+        <div class="room-cell aura">aura</div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell reception" style="width:200px;">Floor 0 — Reception</div>
+      </div>
+      <div class="room-diagram-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-light);border:1.5px solid var(--blue);"></div>Occupied</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f0cfc4;border:1.5px solid var(--accent);"></div>Aura spread</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--paper-dark);border:1.5px dashed var(--rule);"></div>Empty slot</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--ink);"></div>Reception</div>
+      </div>
+    </div>
+
+    <!-- BLOCK: Parallax diagram -->
+    <div class="parallax-diagram">
+      <div class="parallax-layer" style="background:var(--paper-dark);">
+        <div class="parallax-layer-num">L0</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#382a5a;width:15%;">Sky</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Furthest layer</span><span class="parallax-info-sub">2560 × 1080px · tileable</span></div>
+        <div class="parallax-speed">Slowest scroll</div>
+      </div>
+      <!-- Add more layers following the same pattern -->
+    </div>
+
+    <!-- BLOCK: Inspiration card grid -->
+    <div class="inspo-grid">
+      <div class="inspo-card">
+        <!-- Replace with an <img> tag when you have a real image -->
+        <div class="inspo-placeholder"><span>IMAGE PLACEHOLDER</span></div>
+        <div class="inspo-body">
+          <div class="inspo-title">Reference Title <span class="inspo-medium med-game">Game</span></div>
+          <p class="inspo-desc">Description of the visual style and what to take away from it.</p>
+          <div class="inspo-tags">
+            <span class="itag">silhouette</span>
+            <span class="itag w">contrast</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inspo-note-box">
+      <strong>Note:</strong> Additional context about the inspiration references.
+    </div>
+
+    <!-- BLOCK: Convention link cards (cross-doc links) -->
+    <div class="convention-cards">
+      <a class="convention-card" href="../guidelines-and-normes/coding-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">Coding Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/coding-conventions.html</div>
+      </a>
+    </div>
+
+    <!-- BLOCK: Index doc-list (for the hub index page only) -->
+    <div class="doc-list">
+      <a href="path/to/doc.html" class="doc-entry blue">
+        <span class="doc-entry-label">Category</span>
+        <span class="doc-entry-title">Document Title</span>
+        <span class="doc-entry-desc">Short description</span>
+        <span class="doc-entry-arrow">→</span>
+      </a>
+    </div>
+
+  </div><!-- end .section -->
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER  — always keep this block
+       ══════════════════════════════════════════════════════════ -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — [Document Full Title] v1.0</div>
+    <div>[Team] · [Short identifier]</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div><!-- end .page -->
+
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS — always include both
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- Copy button handler (used by .code-block) -->
+<script>
+  function copyBlock(btn) {
+    const block = btn.closest('.code-block').querySelector('.code-body');
+    navigator.clipboard.writeText(block.innerText).then(() => {
+      btn.textContent = 'copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+
+<!--
+  Milestone checklist script (keep if this doc uses the checklist hero box,
+  remove if it uses the rules variant instead).
+  Change STORAGE_KEY to something unique per document.
+-->
+<script>
+  const STORAGE_KEY = 'cryptid-hotel-[unique-doc-id]'; // ← CHANGE THIS per document
+  let memChecked = [];
+
+  function getChecked() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return memChecked; }
+  }
+  function saveChecked(ids) {
+    memChecked = ids;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); } catch {}
+  }
+  function updateProgress() {
+    const total = document.querySelectorAll('.milestone-item').length;
+    const done  = document.querySelectorAll('.milestone-item.checked').length;
+    const fill  = document.getElementById('progress-fill');
+    const count = document.getElementById('progress-count');
+    if (fill)  fill.style.width = (done / total * 100) + '%';
+    if (count) count.textContent = done;
+  }
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    const id = el.dataset.id;
+    let checked = getChecked();
+    if (el.classList.contains('checked')) { if (!checked.includes(id)) checked.push(id); }
+    else { checked = checked.filter(x => x !== id); }
+    saveChecked(checked);
+    updateProgress();
+  }
+  function initMilestone() {
+    getChecked().forEach(id => {
+      const el = document.querySelector(`.milestone-item[data-id="${id}"]`);
+      if (el) el.classList.add('checked');
+    });
+    document.querySelectorAll('.milestone-item').forEach(el => el.addEventListener('click', () => toggleCheck(el)));
+    updateProgress();
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMilestone); }
+  else { initMilestone(); }
+</script>
+
+<!-- Shared navbar — always last -->
+<script src="../navbar.js"></script>
+</body>
+</html>

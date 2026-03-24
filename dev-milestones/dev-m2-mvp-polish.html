@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cryptid Hotel — Dev M2 MVP Polish</title>
+<link rel="icon" type="image/png" href="../icone_website.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e;        --ink-light: #2e2e4a;
+    --paper: #f5f0e8;      --paper-dark: #ede7d9;
+    --accent: #c45c3a;     --accent-light: #e8785a;   --accent-muted: #f0cfc4;
+    --rule: #c8bfaf;       --text: #2a2535;            --text-muted: #7a7068;
+    --green: #3a6b4a;      --green-light: #cfe8d8;
+    --blue: #2a4a7a;       --blue-light: #d0dff0;
+    --amber: #b87a20;      --amber-light: #f5e8cc;
+    --purple: #5a3a7a;     --purple-light: #e8d8f5;
+    --teal: #1a5a5a;       --teal-light: #cce8e8;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d0c0; font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; font-weight: 300; }
+
+  .page { max-width: 900px; margin: 40px auto; background: var(--paper); box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1); padding: 64px 72px; position: relative; }
+  .page::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,165,140,0.13) 27px, rgba(180,165,140,0.13) 28px); pointer-events: none; z-index: 0; }
+  .page > * { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .doc-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--ink); line-height: 1.1; margin-bottom: 4px; }
+  .doc-subtitle { font-size: 0.95rem; color: var(--text-muted); font-style: italic; }
+  .doc-meta { text-align: right; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
+  .doc-meta strong { color: var(--text); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 44px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .section-num { font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; min-width: 24px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--ink); flex: 1; }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+  .section-sub { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; }
+  .body-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.7; }
+
+  /* MILESTONE HERO BOX */
+  .hero-box { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 2px; margin-bottom: 44px; }
+  .hero-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; display: block; }
+  .hero-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #f5f0e8; margin-bottom: 20px; }
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .milestone-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; font-size: 0.88rem; color: #d8d0c0; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .milestone-item:hover { background: rgba(255,255,255,0.1); }
+  .milestone-item.checked { background: rgba(58,107,74,0.25) !important; border-color: rgba(58,180,100,0.4) !important; }
+  .milestone-item.special { grid-column: span 2; border-color: rgba(196,92,58,0.3); background: rgba(196,92,58,0.08); }
+  .milestone-item.special .check { border-color: var(--accent-light); }
+  .milestone-item.priority-high { border-left: 3px solid #e87070; }
+  .milestone-item.priority-medium { border-left: 3px solid var(--amber); }
+  .check { width: 18px; height: 18px; border: 1.5px solid rgba(196,92,58,0.6); border-radius: 2px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; position: relative; }
+  .milestone-item.checked .check { background: #3a9a5a; border-color: #3a9a5a; }
+  .milestone-item.checked .check::after { content: ''; display: block; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px,-1px); }
+  .item-label { font-weight: 400; color: #f0ece4; transition: color 0.15s; }
+  .milestone-item.checked .item-label { color: #8ac8a0; text-decoration: line-through; text-decoration-color: rgba(138,200,160,0.5); }
+  .item-note { font-size: 0.78rem; color: #8a8070; margin-top: 2px; }
+  .milestone-progress { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #3a9a5a; border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+  .progress-label { font-size: 0.72rem; color: #8a8070; white-space: nowrap; min-width: 60px; text-align: right; }
+  .progress-label span { color: #3a9a5a; font-weight: 500; }
+
+  /* PRIORITY GROUP LABELS inside milestone */
+  .milestone-group-label {
+    grid-column: span 2;
+    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #5a5470;
+    padding: 10px 2px 4px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 4px;
+  }
+  .milestone-group-label:first-child { border-top: none; margin-top: 0; padding-top: 2px; }
+
+  /* TAGS */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin: 1px; font-family: var(--mono); }
+  .tag-green  { background: var(--green-light);  color: var(--green);  }
+  .tag-blue   { background: var(--blue-light);   color: var(--blue);   }
+  .tag-amber  { background: var(--amber-light);  color: var(--amber);  }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-teal   { background: var(--teal-light);   color: var(--teal);   }
+  .tag-red    { background: #f5d8d8; color: #7a2a2a; }
+  .tag-ink    { background: var(--ink); color: var(--paper); }
+
+  /* RULE LIST */
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .rule-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; padding: 10px 14px; background: var(--paper-dark); border-left: 3px solid var(--rule); }
+  .rule-list li.good   { border-left-color: var(--green);  background: var(--green-light);  }
+  .rule-list li.info   { border-left-color: var(--blue);   background: var(--blue-light);   }
+  .rule-list li.warn   { border-left-color: var(--amber);  background: var(--amber-light);  }
+  .rule-list li.danger { border-left-color: var(--accent); background: var(--accent-muted); }
+  .rule-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px; }
+  thead tr { background: var(--ink); color: var(--paper); }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: var(--paper-dark); }
+  tbody tr:nth-child(odd)  { background: var(--paper); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: var(--text); vertical-align: middle; }
+  tbody td:first-child { font-weight: 500; color: var(--ink); }
+  .table-group-row td { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 8px 14px; background: #f0ece4 !important; }
+
+  /* INLINE CODE */
+  code { font-family: var(--mono); font-size: 0.82rem; background: var(--paper-dark); border: 1px solid var(--rule); padding: 1px 6px; border-radius: 2px; color: var(--ink); }
+
+  /* SPEC CARDS */
+  .spec-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .spec-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 14px; }
+  .spec-card { border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 18px 16px; background: var(--paper-dark); border-radius: 0 0 2px 2px; }
+  .spec-card.blue   { border-top-color: var(--blue);   }
+  .spec-card.green  { border-top-color: var(--green);  }
+  .spec-card.amber  { border-top-color: var(--amber);  }
+  .spec-card.purple { border-top-color: var(--purple); }
+  .spec-card.teal   { border-top-color: var(--teal);   }
+  .spec-card-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .spec-card-value { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); line-height: 1.2; margin-bottom: 6px; }
+  .spec-card-note  { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* FLOW */
+  .flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+  .flow-step { display: grid; grid-template-columns: 32px 1fr; gap: 0 14px; }
+  .flow-spine { display: flex; flex-direction: column; align-items: center; }
+  .flow-dot { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 0.75rem; color: var(--accent); font-style: italic; background: var(--paper); flex-shrink: 0; }
+  .flow-line { width: 1px; flex: 1; min-height: 10px; background: var(--rule); margin: 3px 0; }
+  .flow-card { background: var(--paper-dark); border: 1px solid var(--rule); border-left: 3px solid var(--accent); padding: 14px 18px; margin-bottom: 5px; border-radius: 2px; }
+  .flow-card-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .flow-card-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); }
+  .flow-card-body  { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+  .flow-card-why { margin-top: 10px; padding: 8px 12px; background: var(--paper); border-left: 2px solid var(--amber); font-size: 0.80rem; color: var(--text-muted); line-height: 1.6; }
+  .flow-card-why strong { font-size: 0.70rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); display: block; margin-bottom: 2px; }
+  .fc-blue   .flow-dot { border-color: var(--blue);   color: var(--blue);   }
+  .fc-blue   .flow-card{ border-left-color: var(--blue);   }
+  .fc-teal   .flow-dot { border-color: var(--teal);   color: var(--teal);   }
+  .fc-teal   .flow-card{ border-left-color: var(--teal);   }
+  .fc-amber  .flow-dot { border-color: var(--amber);  color: var(--amber);  }
+  .fc-amber  .flow-card{ border-left-color: var(--amber);  }
+  .fc-purple .flow-dot { border-color: var(--purple); color: var(--purple); }
+  .fc-purple .flow-card{ border-left-color: var(--purple); }
+  .fc-green  .flow-dot { border-color: var(--green);  color: var(--green);  }
+  .fc-green  .flow-card{ border-left-color: var(--green);  }
+
+  /* SAFEGUARD LIST */
+  .safeguard-list { display: flex; flex-direction: column; gap: 8px; }
+  .safeguard-row { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 12px 16px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; align-items: start; }
+  .safeguard-icon  { font-size: 0.95rem; padding-top: 2px; }
+  .safeguard-title { font-weight: 500; color: var(--ink); font-size: 0.88rem; margin-bottom: 3px; }
+  .safeguard-body  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* STRUCTURE LIST */
+  .structure-list { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .structure-item { display: grid; grid-template-columns: 32px 220px 1fr; align-items: start; padding: 11px 16px; border-bottom: 1px solid var(--rule); }
+  .structure-item:last-child { border-bottom: none; }
+  .structure-item:nth-child(odd)  { background: var(--paper); }
+  .structure-item:nth-child(even) { background: var(--paper-dark); }
+  .structure-num  { font-family: 'DM Serif Display', serif; font-size: 0.78rem; color: var(--accent); font-style: italic; padding-top: 1px; }
+  .structure-name { font-family: var(--mono); font-size: 0.80rem; font-weight: 500; color: var(--ink); padding-right: 12px; padding-top: 1px; }
+  .structure-desc { font-size: 0.80rem; color: var(--text-muted); line-height: 1.55; }
+
+  /* CONVENTION LINK CARDS */
+  .convention-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .convention-card { border: 1px solid var(--rule); border-top: 3px solid var(--blue); padding: 18px 16px; background: var(--paper-dark); border-radius: 0 0 2px 2px; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.15s; }
+  .convention-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.1); }
+  .convention-card-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .convention-card-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 6px; }
+  .convention-card-link  { font-size: 0.75rem; color: var(--blue); font-family: monospace; }
+
+  /* CODE BLOCK */
+  .code-block { background: var(--ink); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: rgba(0,0,0,0.25); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .code-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #5a5470; }
+  .copy-btn { font-family: var(--mono); font-size: 0.65rem; padding: 3px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; color: #5a5470; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+  .copy-btn:hover  { color: #a09880; border-color: rgba(255,255,255,0.2); }
+  .copy-btn.copied { color: #5ac870; border-color: rgba(58,200,112,0.4); }
+  .code-body { padding: 20px 22px; font-family: var(--mono); font-size: 0.82rem; line-height: 2; color: #c8c0b0; white-space: pre; overflow-x: auto; }
+  .kw  { color: #c47a5a; }
+  .fn  { color: #8ab4e8; }
+  .sig { color: #c8a0e8; }
+  .cl  { color: #e8c878; }
+  .cm  { color: #4a4860; font-style: italic; }
+  .num { color: #e8a060; }
+  .op  { color: #7a7490; }
+  .type{ color: #e8c878; }
+  .var { color: #d0c8b8; }
+
+  /* ROOM DIAGRAM */
+  .room-diagram { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 14px; background: var(--paper-dark); padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .room-row { display: flex; gap: 4px; }
+  .room-cell { width: 64px; height: 40px; border: 1.5px solid var(--rule); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); background: var(--paper); }
+  .room-cell.occupied  { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .room-cell.reception { background: var(--ink); border-color: var(--ink); color: #f5f0e8; }
+  .room-cell.aura      { background: #f0cfc4; border-color: var(--accent); color: var(--accent); }
+  .room-cell.empty     { background: var(--paper-dark); border-style: dashed; }
+  .room-cell.highlight { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .room-cell.ui-hover  { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+  .room-diagram-legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+  .legend-item  { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); }
+  .legend-dot   { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  /* PARALLAX DIAGRAM */
+  .parallax-diagram { border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .parallax-layer { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--rule); gap: 16px; }
+  .parallax-layer:last-child { border-bottom: none; }
+  .parallax-layer-num { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); width: 24px; flex-shrink: 0; }
+  .parallax-bar-wrap { flex: 1; height: 28px; background: var(--paper-dark); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+  .parallax-bar { height: 100%; display: flex; align-items: center; padding-left: 10px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: white; }
+  .parallax-info { width: 220px; flex-shrink: 0; }
+  .parallax-info-title { font-size: 0.8rem; font-weight: 500; color: var(--ink); display: block; }
+  .parallax-info-sub   { font-size: 0.72rem; color: var(--text-muted); }
+  .parallax-speed { width: 80px; flex-shrink: 0; text-align: right; font-size: 0.72rem; color: var(--text-muted); }
+
+  /* FOOTER */
+  .doc-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  .page-num { font-family: 'DM Serif Display', serif; font-size: 0.9rem; color: var(--ink); }
+
+  /* DIVIDER between sections of notes */
+  .mini-divider { height: 1px; background: var(--rule); margin: 16px 0; }
+
+  @media print { body { background: white; } .page { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="doc-tag">Internal — Dev Team</span>
+      <h1>Dev M2<br>MVP Polish</h1>
+      <p class="doc-subtitle">Interaction systems, Player UI feedback, race effects & visual polish</p>
+    </div>
+    <div class="doc-meta">
+      <div><strong>Version</strong> 1.0</div>
+      <div><strong>Milestone</strong> Dev M2 — MVP Polish</div>
+      <div><strong>Engine</strong> Godot 4.6.1</div>
+      <div><strong>Date</strong> 2025</div>
+      <div><strong>Status</strong> Not started</div>
+    </div>
+  </div>
+
+  <!-- MILESTONE CHECKLIST HERO -->
+  <div class="hero-box">
+    <span class="hero-tag">Dev M2 — MVP Polish · 16 Tasks Total</span>
+    <h2>Task List</h2>
+
+    <div class="milestone-grid" id="milestone-grid">
+
+      <div class="milestone-group-label">🔴 High Priority — Core Interaction</div>
+
+      <div class="milestone-item priority-high" data-id="room-placement">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Room Placement System</div>
+          <div class="item-note">Press E to hold a room, click to place it</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-high" data-id="client-mouse-assign">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Client Mouse Assignment System</div>
+          <div class="item-note">Drag & assign clients to rooms via mouse</div>
+        </div>
+      </div>
+
+      <div class="milestone-group-label">🟡 Medium Priority — Feedback & Feel</div>
+
+      <div class="milestone-item priority-medium" data-id="day-end-button">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Button To Trigger Day End</div>
+          <div class="item-note">Must display damage results on resolution</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-medium" data-id="client-stat-hover">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Client Stat Display on Hover</div>
+          <div class="item-note">Show requirements & auras on mouse hover</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-medium" data-id="parallax-bg">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Parallax Backgrounds</div>
+          <div class="item-note">Scrolling multi-layer environment BG</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-medium" data-id="parallax-ground">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Parallax Ground</div>
+          <div class="item-note">Ground layer that moves with the hotel</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-medium" data-id="moving-hotel">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Moving Hotel</div>
+          <div class="item-note">Hotel drifts/walks across the scene</div>
+        </div>
+      </div>
+      <div class="milestone-item priority-medium" data-id="room-effect-icons">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Icons for Current Effects on a Room</div>
+          <div class="item-note">Visual badge showing active auras/effects per room</div>
+        </div>
+      </div>
+
+      <div class="milestone-group-label">🟢 Low Priority — Systems & Polish</div>
+
+      <div class="milestone-item" data-id="client-req-display">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Client Requirements Status Display</div>
+          <div class="item-note">Show per-requirement fulfilment state</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="item-system">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Item System</div>
+          <div class="item-note">Room items that satisfy requirements or add auras</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="effect-system">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Effect System</div>
+          <div class="item-note">Generalised effect runner used by items & race effects</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="race-fresno">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Race Effect — Fresno Nightcrawler</div>
+          <div class="item-note">Unique race behaviour implementation</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="race-wendigo">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Race Effect — Wendigo</div>
+          <div class="item-note">Unique race behaviour implementation</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="hotel-bob">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Slight Bobbing of the Hotel</div>
+          <div class="item-note">Periodic camera movement simulating riding a walking mount</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="item-damage-check">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Add Item Checks to Damage Check</div>
+          <div class="item-note">Items must be evaluated at day resolution</div>
+        </div>
+      </div>
+      <div class="milestone-item" data-id="camera-system">
+        <div class="check"></div>
+        <div>
+          <div class="item-label">Better Camera System</div>
+          <div class="item-note">Locked to hotel, zoom in/out still functional</div>
+        </div>
+      </div>
+
+    </div><!-- end milestone-grid -->
+
+    <div class="milestone-progress">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-label"><span id="progress-count">0</span> / 16 completed</div>
+    </div>
+  </div>
+
+
+  <!-- SECTION 01 — OVERVIEW -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Milestone Overview</h2>
+      <div class="section-rule"></div>
+      <span class="section-sub">What M2 is about</span>
+    </div>
+    <div class="spec-grid-3">
+      <div class="spec-card blue">
+        <span class="spec-card-label">Total Tasks</span>
+        <div class="spec-card-value">16</div>
+        <div class="spec-card-note">Across interaction, UI, systems, and visual layers.</div>
+      </div>
+      <div class="spec-card amber">
+        <span class="spec-card-label">High Priority</span>
+        <div class="spec-card-value">2</div>
+        <div class="spec-card-note">Room Placement + Client Mouse Assignment.</div>
+      </div>
+      <div class="spec-card green">
+        <span class="spec-card-label">Playable Goal</span>
+        <div class="spec-card-value">1 Day Cycle</div>
+        <div class="spec-card-note">Place rooms → assign clients → trigger day end → see damage result.</div>
+      </div>
+    </div>
+
+    <ul class="rule-list">
+      <li class="info"><span class="rule-icon">i</span><span>Race effects (Fresno Nightcrawler, Wendigo) are scoped to M2 but are <strong>low priority</strong> — polish the core loop first, then layer them in.</span></li>
+      <li class="good"><span class="rule-icon">✓</span><span>M1 systems (grid, aura propagation, <code>client_satisfaction_manager.gd</code>) are assumed stable as a starting point but may need revamping as M2 work surfaces new requirements.</span></li>
+    </ul>
+  </div>
+
+
+  <!-- SECTION 02 — INTERACTION SYSTEMS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Interaction Systems</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="body-text">
+      Both tasks deal with mouse-driven player control — placing rooms into the hotel grid and assigning clients to those rooms.
+    </p>
+
+    <!-- Room Placement flow -->
+    <div class="flow">
+      <div class="flow-step fc-blue">
+        <div class="flow-spine"><div class="flow-dot">1</div><div class="flow-line"></div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Room Placement System</div>
+              <span class="tag tag-red">High</span>
+            </div>
+            <div class="flow-card-body">
+              Player presses <code>E</code> to pick up a room. The room follows the cursor as a ghost preview. Clicking on a valid empty grid cell places it. Pressing <code>E</code> again or right-clicking cancels. The grid highlights valid slots while the ghost is active. Placement calls into <code>hotel_grid.gd</code> to register the new room and trigger an aura recalculation.
+            </div>
+            <div class="flow-card-why"><strong>Relevant scripts</strong>hotel_grid.gd · room.gd · (new) room_placement_controller.gd</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step fc-teal">
+        <div class="flow-spine"><div class="flow-dot">2</div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Client Mouse Assignment System</div>
+              <span class="tag tag-red">High</span>
+            </div>
+            <div class="flow-card-body">
+              Player clicks a client at the reception to pick them up (ghost follows cursor). Clicking a room with an open slot drops the client in. Clicking an occupied room swaps clients. Dragging back to the reception unassigns. The system must call <code>room.assign_client()</code> and trigger a requirement state refresh on drop.
+            </div>
+            <div class="flow-card-why"><strong>Relevant scripts</strong>client.gd · room.gd · (new) client_placement_controller.gd</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Room diagram: ghost preview illustration -->
+    <div class="room-diagram">
+      <div class="room-row">
+        <div class="room-cell occupied">Room</div>
+        <div class="room-cell highlight" style="border-style:dashed;">[ E ] ▸</div>
+        <div class="room-cell highlight" style="border-style:dashed;">[ E ] ▸</div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell ui-hover">Client ▸</div>
+        <div class="room-cell occupied">Room ★</div>
+        <div class="room-cell highlight" style="border-style:dashed;">[ E ] ▸</div>
+      </div>
+      <div class="room-row">
+        <div class="room-cell reception" style="width:200px;">Floor 0 — Reception</div>
+      </div>
+      <div class="room-diagram-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green-light);border:1.5px dashed var(--green);"></div>Ghost / valid placement target (Empty Room)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--purple-light);border:1.5px solid var(--purple);"></div>Client being dragged</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-light);border:1.5px solid var(--blue);"></div>Occupied room</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION 03 — UI & FEEDBACK -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>UI & Feedback</h2>
+      <div class="section-rule"></div>
+      <span class="section-sub">Player-facing information</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Priority</th>
+          <th>What it shows</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Button To Trigger Day End</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>Ends the day and runs the satisfaction check</td>
+          <td>Damage output goes to the terminal for now — no in-game result display yet</td>
+        </tr>
+        <tr>
+          <td>Client Stat Display on Hover</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>Requirements, aura type, race</td>
+          <td>Tooltip-style popup; reads from <code>client.gd</code> data directly</td>
+        </tr>
+        <tr>
+          <td>Client Requirements Status Display</td>
+          <td><span class="tag tag-green">Low</span></td>
+          <td>Per-requirement ✓ / ✗ state in real time</td>
+          <td>Updates live when client is moved or room state changes</td>
+        </tr>
+        <tr>
+          <td>Icons for Current Effects on a Room</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>Small badge icons on each room showing active aura types</td>
+          <td>Should update immediately on aura recalculation; read from room state</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+
+  <!-- SECTION 04 — GAME SYSTEMS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>New Game Systems</h2>
+      <div class="section-rule"></div>
+      <span class="section-sub">Items · Effects · Race Abilities</span>
+    </div>
+    <p class="body-text">
+      Three interconnected systems that sit on top of the M1 foundation. Race effects are varied enough in nature that some logic rewrites may be needed as each one is implemented.
+    </p>
+
+    <div class="flow">
+      <div class="flow-step fc-purple">
+        <div class="flow-spine"><div class="flow-dot">A</div><div class="flow-line"></div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Effect System</div>
+              <span class="tag tag-green">Low</span>
+            </div>
+            <div class="flow-card-body">
+              A system that applies effects to rooms or clients. An effect can add an aura type to a room, mark a requirement as satisfied, or trigger events. Used by items placed in rooms and by race unique effects. Exact architecture TBD as implementation progresses.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step fc-amber">
+        <div class="flow-spine"><div class="flow-dot">B</div><div class="flow-line"></div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Item System</div>
+              <span class="tag tag-green">Low</span>
+            </div>
+            <div class="flow-card-body">
+              Rooms can hold items. Each item holds an array of effects. When an item is placed into a room its effects become active; when removed they are revoked. <code>client_satisfaction_manager.gd</code> must evaluate active item effects before computing satisfaction — this is tracked separately as the <em>Add Item Checks to Damage Check</em> task.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step fc-green">
+        <div class="flow-spine"><div class="flow-dot">C</div></div>
+        <div>
+          <div class="flow-card">
+            <div class="flow-card-top">
+              <div class="flow-card-title">Race Effects — Fresno Nightcrawler &amp; Wendigo</div>
+              <span class="tag tag-green">Low</span>
+            </div>
+            <div class="flow-card-body">
+              Each race has a unique passive or triggered effect. Because race effects can vary significantly from one another, implementing them may require reworking parts of existing systems. Only Fresno Nightcrawler and Wendigo are in scope for M2; the remaining races follow in later milestones.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION 05 — VISUAL POLISH -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Visual Polish</h2>
+      <div class="section-rule"></div>
+      <span class="section-sub">Movement · Parallax · Camera</span>
+    </div>
+    <!-- Parallax diagram -->
+    <div class="parallax-diagram">
+      <div class="parallax-layer" style="background:#f0f0f8;">
+        <div class="parallax-layer-num">L0</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#2a2050;width:12%;">Far sky / moon</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Parallax Backgrounds — Layer 0</span><span class="parallax-info-sub">Slowest · atmospheric sky, distant fog</span></div>
+        <div class="parallax-speed">~0.05× speed</div>
+      </div>
+      <div class="parallax-layer" style="background:#e8eef4;">
+        <div class="parallax-layer-num">L1</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#2a3a20;width:22%;">Treeline — far</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Parallax Backgrounds — Layer 1</span><span class="parallax-info-sub">Slow · distant treeline silhouettes</span></div>
+        <div class="parallax-speed">~0.15× speed</div>
+      </div>
+      <div class="parallax-layer" style="background:#e0e8dc;">
+        <div class="parallax-layer-num">L2</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#3a4a28;width:38%;">Treeline — mid</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Parallax Backgrounds — Layer 2</span><span class="parallax-info-sub">Mid · mid-distance forest layer</span></div>
+        <div class="parallax-speed">~0.30× speed</div>
+      </div>
+      <div class="parallax-layer" style="background:#d8e0d0;">
+        <div class="parallax-layer-num">L3</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#4a5a30;width:55%;">Treeline — near</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Parallax Backgrounds — Layer 3</span><span class="parallax-info-sub">Fast · close foreground treeline</span></div>
+        <div class="parallax-speed">~0.55× speed</div>
+      </div>
+      <div class="parallax-layer" style="background:#e8e0d0;">
+        <div class="parallax-layer-num">GND</div>
+        <div class="parallax-bar-wrap"><div class="parallax-bar" style="background:#5a4a2a;width:80%;">Ground</div></div>
+        <div class="parallax-info"><span class="parallax-info-title">Parallax Ground</span><span class="parallax-info-sub">Fastest · ground directly below the hotel</span></div>
+        <div class="parallax-speed">~0.8× speed</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Priority</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Parallax Backgrounds</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>Three treeline layers (far / mid / near) plus a sky layer scrolling at different speeds. Use <code>ParallaxBackground</code> + <code>ParallaxLayer</code> nodes in Godot. Layers should loop seamlessly.</td>
+        </tr>
+        <tr>
+          <td>Parallax Ground</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>A dedicated ground layer that moves in sync with the hotel's forward drift. Faster scroll rate than the background layers. Can be a tiling sprite.</td>
+        </tr>
+        <tr>
+          <td>Moving Hotel</td>
+          <td><span class="tag tag-amber">Medium</span></td>
+          <td>The hotel drifts horizontally across the scene as if walking on its spider legs. Velocity should be gentle — this is ambiance, not gameplay. Drives the parallax speed reference value.</td>
+        </tr>
+        <tr>
+          <td>Slight Bobbing of the Hotel</td>
+          <td><span class="tag tag-green">Low</span></td>
+          <td>Periodic camera movement that simulates the feeling of riding a walking mount — like the rhythm of a horse walking. Not a constant idle sway, but a deliberate periodic shift tied to the hotel's movement cadence.</td>
+        </tr>
+        <tr>
+          <td>Better Camera System</td>
+          <td><span class="tag tag-green">Low</span></td>
+          <td>Camera follows the hotel's X position but allows the player to zoom in/out with scroll wheel. Clamp zoom to sane min/max. Camera should not clip into the ground layer.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+  <!-- SECTION 06 — CONVENTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Conventions & Guidelines</h2>
+      <div class="section-rule"></div>
+    </div>
+    <ul class="rule-list" style="margin-bottom:18px;">
+      <li class="info"><span class="rule-icon">i</span><span>All new scripts, nodes, and assets introduced in M2 must follow team conventions. Name things before you create them — check the naming doc if in doubt.</span></li>
+    </ul>
+    <div class="convention-cards">
+      <a class="convention-card" href="../guidelines-and-normes/coding-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">Coding Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/coding-conventions.html</div>
+      </a>
+      <a class="convention-card" href="../guidelines-and-normes/file-naming-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">File Naming Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/file-naming-conventions.html</div>
+      </a>
+      <a class="convention-card" href="../guidelines-and-normes/godot-conventions.html">
+        <span class="convention-card-label">Guidelines</span>
+        <div class="convention-card-title">Godot Conventions</div>
+        <div class="convention-card-link">../guidelines-and-normes/godot-conventions.html</div>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>Cryptid Hotel — Dev Milestone 2 — MVP Polish v1.0</div>
+    <div>Dev Team · dev-m2-mvp-polish</div>
+    <div class="page-num">1</div>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+  function copyBlock(btn) {
+    const block = btn.closest('.code-block').querySelector('.code-body');
+    navigator.clipboard.writeText(block.innerText).then(() => {
+      btn.textContent = 'copied!'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+
+<script>
+  const STORAGE_KEY = 'cryptid-hotel-dev-m2-mvp-polish';
+  let memChecked = [];
+
+  function getChecked() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return memChecked; }
+  }
+  function saveChecked(ids) {
+    memChecked = ids;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); } catch {}
+  }
+  function updateProgress() {
+    const total = document.querySelectorAll('.milestone-item').length;
+    const done  = document.querySelectorAll('.milestone-item.checked').length;
+    const fill  = document.getElementById('progress-fill');
+    const count = document.getElementById('progress-count');
+    if (fill)  fill.style.width = (done / total * 100) + '%';
+    if (count) count.textContent = done;
+  }
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    const id = el.dataset.id;
+    let checked = getChecked();
+    if (el.classList.contains('checked')) { if (!checked.includes(id)) checked.push(id); }
+    else { checked = checked.filter(x => x !== id); }
+    saveChecked(checked);
+    updateProgress();
+  }
+  function initMilestone() {
+    getChecked().forEach(id => {
+      const el = document.querySelector(`.milestone-item[data-id="${id}"]`);
+      if (el) el.classList.add('checked');
+    });
+    document.querySelectorAll('.milestone-item').forEach(el => el.addEventListener('click', () => toggleCheck(el)));
+    updateProgress();
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMilestone); }
+  else { initMilestone(); }
+</script>
+
+<script src="../navbar.js"></script>
+</body>
+</html>
